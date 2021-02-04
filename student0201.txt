@@ -1,0 +1,49 @@
+nodejs net(webSocket)模块
+详细看net_server.js注释
+
+-------------------------------
+touchend触发的事件
+	obj.addEventListener('touchend',f_1,false);
+
+
+多点触摸
+1、targetTouches 目标上面的手指们
+2、ev.preventDefault	
+3、touchend里面
+	targeTouches	还在物体上没离开的手指
+	changeTouches	离开的手指
+		
+		
+-----------------------------
+pc	mouse
+移动	touch
+
+ie10+以上浏览器兼容
+pc+移动	pointer=》mouse+touch
+	onpointerstart
+	onpointermove
+	onpointerend
+-----------------------------	
+
+hammer.js
+
+let hammertime = new Hammer(oBox, {});
+				
+				//快速点击 <250ms
+				hammertime.on('tap', function(ev) {
+					console.log(ev);
+				})
+				//长按>250ms
+				hammertime.on('press', function(ev) {
+					console.log(ev);
+				})
+				
+				//拖拽
+				hammertime.on('pan', function(ev) {
+					console.log('1111');
+				})
+				
+				//滑动
+				hammertime.on('swipe', function(ev) {
+					console.log('2222');
+				})

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style>
+		body{
+			background-color: #000000;
+		}
+		#c1{
+			background-color: #fff;
+		}
+	</style>
+	<script>
+		window.onload=function(){
+			let oC=document.querySelector('#c1');
+			let btn=document.querySelector('#btn');
+			let file=document.getElementsByName('file')[0];
+			let btn2=document.querySelector('#btn2');
+			let gd=oC.getContext('2d');	//获取-绘图用的接口
+			//路径操作-ps的选取一样-需要做填充或描边才能显示
+			let color;
+			let lastX,lastY;
+			
+			oC.onmousedown=function(ev){
+				lastX=ev.offsetX;
+				lastY=ev.offsetY;
+				oC.onmousemove=function(ev){
+					// console.log(lastX,lastY);
+					gd.beginPath();	//每次先结束之前绘画
+					gd.moveTo(lastX,lastY);
+					gd.lineTo(ev.offsetX,ev.offsetY);
+					lastX=ev.offsetX;
+					lastY=ev.offsetY;
+					gd.strokeStyle=color;
+					gd.stroke();
+				}
+				oC.onmouseup=function(){
+					oC.onmousemove=null;
+					oC.onmouseup=null;
+				}
+			}
+			
+			btn.addEventListener('click',()=>{
+				//获取base64
+				let str=oC.toDataURL();
+				//发送请求
+				let oAjax=new XMLHttpRequest();
+				oAjax.open('POST','http://localhost:8080/upBase64',true);
+				oAjax.send(encodeURIComponent(str));
+				oAjax.onreadystatechange=function(){
+					if(oAjax.readyState==4){
+						console.log(oAjax.status);
+					}
+				}
+			});
+			//画进去
+			// btn2.addEventListener('click',()=>{
+			// 	let reader=new FileReader();
+			// 	reader.onload=function(){
+			// 		let oImg=new Image();
+			// 		oImg.src=this.result;
+			// 		oImg.onload=function(){
+			// 			gd.drawImage(oImg,0,0);
+			// 		}
+			// 		console.log(this)
+			// 	}
+			// 	reader.readAsDataURL(file.files[0]);
+			// });
+			//选择完直接画入
+			file.onchange=function(){
+				let reader=new FileReader();
+				reader.onload=function(){	//加载完将file转化成base64（结果在this里面）
+					let oImg=new Image();
+					oImg.src=this.result;
+					oImg.onload=function(){
+						gd.drawImage(oImg,0,0);
+					}
+					console.log(this)
+				}
+				reader.readAsDataURL(file.files[0]);	//写入file
+			}
+		};
+	</script>
+	<body>
+		<button id="btn">上传</button>
+		<button id="btn2">画入</button>
+		<input type="file" name="file" />
+		<canvas id="c1" width="300" height="300">
+			您的浏览器不支持canvas
+		</canvas>
+	</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style>
+		body{
+			background-color: #000000;
+		}
+		#c1{
+			background-color: #fff;
+		}
+	</style>
+	<script>
+		window.onload=function(){
+			let oC=document.querySelector('#c1');
+			let c1=document.querySelector('#color1');
+			let gd=oC.getContext('2d');	//获取-绘图用的接口
+			//路径操作-ps的选取一样-需要做填充或描边才能显示
+			let color;
+			let lastX,lastY;
+			c1.onchange=function(){
+				console.log(this.value);
+				color=this.value;
+			}
+			
+			oC.onmousedown=function(ev){
+				lastX=ev.offsetX;
+				lastY=ev.offsetY;
+				oC.onmousemove=function(ev){
+					console.log(lastX,lastY);
+					gd.beginPath();	//每次先结束之前绘画
+					gd.moveTo(lastX,lastY);
+					gd.lineTo(ev.offsetX,ev.offsetY);
+					lastX=ev.offsetX;
+					lastY=ev.offsetY;
+					gd.strokeStyle=color;
+					gd.stroke();
+				}
+				oC.onmouseup=function(){
+					oC.onmousemove=null;
+					oC.onmouseup=null;
+				}
+			}
+			// gd.moveTo(100,100);	//起点
+			// gd.lineTo(300,200);
+			// gd.stroke();
+
+		};
+	</script>
+	<body>
+		<input type="color" id="color1"/>
+		<canvas id="c1" width="300" height="300">
+			您的浏览器不支持canvas
+		</canvas>
+	</body>
+</html>

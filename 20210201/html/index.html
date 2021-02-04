@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	<!-- <script src="http://localhost:8088/socket.io/socket.io.js"></script> -->
+	</head>
+	<body>
+	</body>
+	<script>
+		//2、连接到服务器
+		const ws=new WebSocket('ws://localhost:8088/');
+		
+		ws.onopen=function(){
+			alert('连接已打开')
+		}
+		
+		ws.onmessage=function(){
+			alert('有消息过来了')
+		}
+		
+		ws.onclose=function(){
+			alert('连接已断开')
+		}	
+		
+		ws.onerror=function(){
+			alert('连接出错')
+		}	
+		
+	</script>
+</html>

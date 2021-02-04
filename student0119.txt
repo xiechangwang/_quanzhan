@@ -1,0 +1,65 @@
+----------------------------
+库-文件夹：管理用的，本身不能存储数据
+表-文件：存储数据
+
+------------------------
+数据库：
+数字：
+	整数		tinyint（-128~127或0~255）、int（21亿或43亿）
+	浮点数	float（小数点后8位）、double（小数点后308位）保存小数点，精度不同
+字符串：
+	小	varchar（255）
+	大	text（2G）
+------------------------	
+id主键（index+unincode）：
+	1、唯一
+	2、性能高
+------------------------
+数据库的语言：SQL
+四大语言（CRUD)-
+	增
+		INSERT INtO 表 (字段的列表) VALUES(值)
+		
+		INSERT INTO user_table (username,password,online) VALUES('wangwu','123456',0)
+	删
+		DELETE FROM 表 WHERE 条件
+		
+		DELETE FROM user_table WHERE ID=3
+	改
+		UPDATE 表 SET 字段=新值,字段=新值... WHERE 条件
+		
+		UPDATE user_table SET password='111111' WHERE ID=2
+	查
+		SELECT 字段列表（* 代表查全部）FROM 表 WHERE 条件
+		
+		SELECT username,online FROM user_table WHERE ID=1;
+	--------------------------
+	注:WHERE后面跟条件	
+------------------------
+nodejs--mysql：
+	const mysql=require('mysql');
+	//连接池--共享
+	//1连接
+	let db=mysql.createConnection({host:"localhost",user:'root',passwprd:'root',database:'20210119'});
+	
+	//2查询数据
+	db.query('SELECT * FROM user_table',(err,data)=>{
+		if(err){
+			console.log(err);
+		}else{
+			console.log(JSON.stringify(data));
+		}
+	});
+	
+----------------------------------------------
+普通需求接口：
+	用户注册:/reg?username=xxx&password=xxx
+			{"code":0,"msg":"信息"}
+	用户登录:/login?username=xxx&password=xxx
+			{"code":0,"msg":"信息"}
+	
+websocket接口：
+	'reg',user,pass=>'reg_ret',code,msg
+	'login',user,pass=>'logon_ret',code,msg
+	'msg',txt=>'msg_ret',code,msg
+			 =>'msg',name,txt	

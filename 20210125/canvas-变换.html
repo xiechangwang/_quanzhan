@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		body{background-color: #000000;}
+		#c1{
+			background-color: #fff;	
+		}
+	</style>
+	<body>
+		<canvas id="c1" width="600" height="400"></canvas>
+	</body>
+	<script>
+		function d2a(n){
+			return n*Math.PI/180;
+		}
+		window.onload=function(){
+			let oC=document.getElementById('c1');
+			let gd=oC.getContext('2d');
+			let rotate=0;
+			setInterval(()=>{
+				gd.clearRect(0,0,oC.width,oC.height);
+				rotate++;
+				//保存canvas状态（颜色，线宽，旋转，translate，不包括图形本身）
+				gd.save();
+				
+				/*和css3执行是一样的，先执行下面的。先旋转再位移*/
+				gd.translate(250,200)	
+				gd.rotate(d2a(rotate));
+				
+				gd.strokeRect(-150,-100,300,200);
+				//恢复
+				gd.restore();
+			},24);
+		}
+	</script>
+</html>

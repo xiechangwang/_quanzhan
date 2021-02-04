@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+		<title></title>
+	</head>
+	<style>
+		*{margin: 0;padding: 0;list-style: none}
+		html{font-size: 20px;}
+		body{overflow-x: hidden;}
+		#banner{width: 25rem;height: 7.8rem;overflow: hidden;}
+		#banner ul{width: 9999rem;transform: translateX(0);}
+		#banner li{width: 25rem;height: 7.8rem;line-height:7.8rem;text-align: center;float: left;}
+		#wrap{background-color:#ccc;}
+		.load_more{position:absolute;z-index: 1;text-align: center;line-height: 30px;width: 100%;}
+		#content{background-color:#fff;transform: translateY(0px);position: relative;z-index: 2;}
+	</style>
+	<script>
+		window.onload=function(){
+			//rem 当前宽度*根字体大小/历史宽度
+			document.documentElement.style.fontSize=document.documentElement.clientWidth*20/500+'px';
+			
+			//拖
+			let banner=document.getElementById('banner');
+			let banner_ul=banner.getElementsByTagName('ul')[0];
+			let content=document.getElementById('content');
+			let load_more=document.getElementsByClassName('load_more')[0];
+			
+			
+			//第一个前面克隆一个
+			banner_ul.insertBefore(banner_ul.children[banner_ul.children.length-1].cloneNode(true),banner_ul.children[0]);
+			
+			//最后一个后面克隆一个
+			banner_ul.appendChild(banner_ul.children[1].cloneNode(true));
+			
+			let banner_x=-banner_ul.children[0].offsetWidth;
+			banner_ul.style.transform=`translateX(${banner_x}px)`;
+			
+			let content_y=0;
+			banner.addEventListener('touchstart',(ev)=>{	//start 手指按下触发
+				banner_ul.style.transition='';
+				content.style.transition='';
+				
+				let startX=ev.targetTouches[0].clientX,
+					startY=ev.targetTouches[0].clientY;
+				let dir='';	//预设方向	
+				
+				let distX=startX-banner_x;
+				let distY=startY-content_y;
+				
+				function fnMove(ev){	//拖动时触发
+					
+					let x=ev.targetTouches[0].clientX;
+					let y=ev.targetTouches[0].clientY;
+					
+					if(!dir){	//方向待确定
+						//阈值:5
+						//Math.abs()	获取绝对值
+						if(Math.abs(x - startX)>=5){
+							dir='x';
+						}else if(Math.abs(y - startY)>=5){
+							dir='y';
+						}	
+					}else{	//方向已经确定
+						if(dir=='x'){	//处理banner
+							banner_x=x-distX;
+							banner_ul.style.transform=`translateX(${banner_x}px)`;
+						}else if(dir=='y'){	//页面下拉
+							content_y=y-distY;
+							
+							if(content_y>0){
+								content.style.transform=`translateY(${content_y/3}px)`;
+								
+								if(content_y>=200){
+									load_more.innerHTML='松开加载';
+								}else{
+									load_more.innerHTML='下拉加载';
+								}
+							}else{
+								content.style.transform=`translateY(${content_y}px)`;
+							}
+						}
+					}
+				}
+				function fnEnd(){
+					banner.removeEventListener('touchmove',fnMove,false);
+					banner.removeEventListener('touchend',fnEnd,false);
+					
+					//处理banner
+					if(dir=='x'){
+						let n=Math.round(-banner_x/banner.offsetWidth);	//获取到banner的第几个索引
+						// if(n<0){
+						// 	n=0;
+						// }else if(n>=banner_ul.children.length){
+						// 	n=banner_ul.children.length-1;
+						// }
+						
+						//无限滚动干预
+						if(n==0){
+							
+							//往左一整段ul》li的长度
+							n=banner_ul.children.length-2;
+							banner_ul.style.transform=`translateX(${banner_x-(banner_ul.children.length-2)*banner_ul.children[0].offsetWidth}px)`;
+						}else if(n==banner_ul.children.length-1){
+							n=1;
+							//往右一整段ul》li的长度
+							banner_ul.style.transform=`translateX(${banner_x + (banner_ul.children.length-2)*banner_ul.children[0].offsetWidth}px)`;
+						}
+						
+						banner_x=-n*banner.offsetWidth;
+						banner_ul.style.transform=`translateX(${banner_x}px)`;
+						banner_ul.style.transition='all 0.7s';
+					}else if(dir=='y'){
+						
+						if(content_y>=200){
+							content_y=30;
+							load_more.innerHTML='正在加载...';
+							
+							//以下模拟ajax
+							setTimeout(()=>{
+								content.style.transition='';
+								content.style.transform=`translateY(0px)`;
+								load_more.innerHTML='下拉加载';
+							},2000)
+						}else{
+							content_y=0;
+						}
+						content.style.transition='all 0.3s';
+						content.style.transform=`translateY(${content_y}px)`;
+					}
+				}
+				banner.addEventListener('touchmove',fnMove,false);
+				banner.addEventListener('touchend',fnEnd,false);
+			},false);
+		}
+	</script>
+	<body>
+		<div id="wrap">
+			<div class="load_more">下拉刷新</div>
+			<div id="content">
+				<div id="banner">
+					<ul>
+						<li style="background-color: #008080;">0</li>
+						<li style="background-color: #0080a0;">1</li>
+						<li style="background-color: #00c0a0;">2</li>
+						<li style="background-color: #aa80a0;">3</li>
+						<li style="background-color: #a6e0a0;">4</li>
+						<li style="background-color: #0a8e00;">5</li>
+						<li style="background-color: #00acea;">6</li>
+					</ul>
+				</div>
+				<div>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+					<p>1233213</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

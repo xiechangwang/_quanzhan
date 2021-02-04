@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style>
+		body{
+			background-color: #000000;
+		}
+		#c1{
+			background-color: #fff;
+		}
+	</style>
+	<script>
+		window.onload=function(){
+			let oC=document.querySelector('#c1');
+			let gd=oC.getContext('2d');	//获取-绘图用的接口
+			//路径操作-ps的选取一样-需要做填充或描边才能显示
+			let l=50,t=50,w=100,h=70;	//矩形
+			
+			let cx=200,cy=250,r=50,startAng=120,endAng=300;
+			gd.strokeRect(l,t,w,h);
+			oC.onclick=function(ev){
+				//检测矩形
+				gd.clearRect(0,0,oC.width,oC.height);
+				if(ev.offsetX>=l && ev.offsetX<=l + w && ev.offsetY>=t&&ev.offsetY<=t + h){
+					console.log('在了');
+					gd.strokeRect(l,t,w,h);
+				}else{
+					console.log('不在');
+					gd.strokeRect(l,t,w,h);
+				};
+				
+			}
+			
+			//圆
+			gd.arc(cx,cy,r,startAng,endAng,false);
+			gd.fillStyle='#ccc';
+			gd.fill();
+			oC.onmousemove=function(ev){
+				//检测原型
+				let a=ev.offsetX-cx;		
+				let b=ev.offsetY-cy;
+				let dis=Math.sqrt(a*a+b*b);	//求斜边
+				gd.beginPath();
+				gd.arc(cx,cy,r,startAng,endAng,false);
+				if(dis<=r){
+					gd.fillStyle='yellow';
+				}else{
+					gd.fillStyle='#ccc';
+				}	
+				gd.fill();
+			}
+			
+			
+			
+		};
+	</script>
+	<body>
+		<canvas id="c1" width="600" height="400">
+			您的浏览器不支持canvas
+		</canvas>
+	</body>
+</html>

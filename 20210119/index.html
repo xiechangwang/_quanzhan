@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		
+	</head>
+	<body>
+		<div>
+			<form>
+				账户：<input type="text" name="user" />
+				<br/>
+				密码：<input type="password" name="pass"/>
+				<br/>
+				<button type="button" class="regs">注册</button>
+				<button type="button" class="login">登录</button>
+				<button type="button" class="btn1">btn1</button>
+				<button type="button" class="btn2" onclick="btn2()">btn2</button>
+			</form>
+		</div>
+	</body>
+	<script src="./node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.regs').click(function(){
+				var user=$('input[name="user"]').val(),
+					pass=$('input[name="pass"]').val();
+				Ajax('http://localhost:8080/reg?user='+user+'&pass='+pass);
+			});
+			
+			$('.login').click(function(){
+				var user=$('input[name="user"]').val(),
+					pass=$('input[name="pass"]').val();
+				Ajax('http://localhost:8080/login?user='+user+'&pass='+pass);
+			});
+			
+			$('.btn1').click(function(){
+				$('.btn2').trigger("click");
+			})
+			$('.btn2').click(function(){
+				alert('123')
+			})
+		});
+		function btn2(){
+			alert('456')
+		}
+		function Ajax(user){
+			$.ajax({
+				url:user,
+				method:'get',
+				success:function(res){
+					
+				},
+				error:function(err){
+				}	
+			})
+		}	
+	</script>
+</html>

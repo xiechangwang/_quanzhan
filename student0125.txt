@@ -1,0 +1,152 @@
+H5新特性
+1、geolocation	定位	
+2、video、audio	视频、音频
+	webSocket推送+video
+	canvas+video
+3、canvas		绘画
+4、webSocket
+5、localStorage	本地存储5MB
+	sessionStorage
+6、webSQL		不安全
+	indexedDB
+7、webWorker	多线程	let w=new Workr('xxxx.js') w.postMessage('参数')	 w.onmessage=function(event){} 
+	JavaScript	单线程 
+8、文件操作
+	拖拽、读取
+	ondragenter	-进入
+	ondragleave	-离开
+	ondragover	-悬停
+	ondrop		-松开鼠标--如果这个ondropover不阻止默认事件，这个不会触发
+	
+	oDiv.addEventListener('drop',function(ev){
+		let oFile=ev.dataTransfer.files[0]
+		oFile.name/size/type...
+		
+		let read=new FileReader();
+		reader.readAsText(文本)
+		reader.readAsArrayBuffer(原始二进制)
+		reader.readAsBinaryString(二进制文本)
+		reader.readAsDataURL(base64)
+		reader.onload=function(){	//返回值
+			console.log(this.result);
+		}
+	},false);
+	
+9、manifest		离线应用	
+
+-----------------------------------------------------------
+canvas-画布
+1、什么东西都能画
+2、性能特别高-大型动画、游戏
+
+getContext('2d');	//获取-绘图用的接口
+-路径操作-只是一个范围（选取）没图形
+1、路径圈起来
+	moveTo、lineTo
+
+2、描边或填充	
+	stroke
+	strokeStyle
+	
+	fill
+	fillStyle
+	
+3、清除之前所有路径操作
+	beginPath();
+		
+4、闭合路径		
+	closePath();
+	
+canvas中可用的形状
+1、矩形
+2、弧形（圆）
+3、多边形
+	
+*矩形{
+	1、路径版
+	rect(x,y,w,h);
+	
+	2、直接出图形
+	strokeRect(x,y,w,h)
+	fillRect(x,y,w,h)
+		
+	擦除图形
+	clearRect();	
+}
+
+*弧形{
+	1、路径版
+	arc(起始圆心x,起始圆心y,半径,起始角,终止角,是否是逆时针)
+	
+	----------------------------------
+	角度 360度
+	弧度 2PI弧度
+	
+	360度=2PI弧度
+	1度=PI/180弧度
+	
+	角度=》弧度    *PI/180
+	
+	1弧度=180/PI度
+	
+	弧度=》角度	*180/PI
+	----------------------------------
+}
+
+
+
+
+*canvas变换{
+	rotate
+	translate
+	scale
+	
+	--------------------------------------
+	使用路径之前--先beginPath
+	使用变换之前--先save（保存）、后restore（恢复）
+	--------------------------------------
+}
+
+*canvas图片{
+	//精简版
+	drawImage(img标签,0,0);
+	-----------------------------------
+	let oImg=new Image();
+	oImg.src="xxx.png";
+	oImg.onload=function(){
+		drawImage(oImg,0,0)
+	};
+	-----------------------------------
+	
+	//完整版
+	drawImage(
+	 img,
+	 sx,sy,sw,wh	s=>source(源头)
+	 dx,dy,dw,dh d=>destination(目标) 画布上的坐标点dx,dy
+	)
+	
+	
+	
+	//像素操作
+	getImageData(0,0,oC.width,oC.height);
+	
+}
+
+*canvas图形对象{
+	
+}
+
+
+总结:{
+	不保存图形信息
+	缺点:不方便-没法修改，没法交互。
+	优点:性能高
+	
+	修改、交互、事件
+	1、svg
+	2、库	
+}
+
+-----------------------------------------------------------
+	
+svg/vml

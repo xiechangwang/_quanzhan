@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		ul,li{
+			list-style: none;
+		}
+		.box{
+			width: 300px;
+			height: 200px;
+			background-color: #E6E6E6;
+			border: 1px solid #666;
+			line-height: 200px;
+			text-align: center;
+			margin-left: 100px;
+			
+		}
+		.tab_box{
+			width: 100%;
+			margin-top: 50px;
+		}
+		.oUl{
+			margin: 0 auto;
+			width: 430px;
+			display: flex;
+			justify-content: space-between;
+			position: relative;
+			height: 40px;
+		}
+		.oUl .ali{
+			width: 70px;
+			text-align: center;
+			line-height: 28px;
+			cursor: pointer;
+		}
+		.oUl .active{
+			color: #0086B3;
+			font-weight: 600;
+		}
+		.oUl .ber{
+			position: absolute;
+			width: 70px;
+			height: 2px;
+			background: #0086B3;
+			bottom: 0;
+			left: 0;
+			transition: all 0.5s;
+			transform: translateX(0px);
+		}
+			
+	</style>
+	<script>
+		window.onload=function(){
+			let oDiv=document.querySelector('.box');
+			//进入
+			oDiv.addEventListener('dragenter',function(){
+				oDiv.innerHTML="释放鼠标"
+			},false);
+			//离开
+			oDiv.addEventListener('dragleave',function(){
+				oDiv.innerHTML="将文件拖拽至此区域"
+			},false);	
+			//悬停
+			oDiv.addEventListener('dragover',function(ev){
+				oDiv.innerHTML="悬停"
+				ev.preventDefault();	//阻止事件
+			},false);
+			//松开鼠标
+			oDiv.addEventListener('drop',function(ev){
+				oDiv.innerHTML="松开鼠标"
+				console.log(ev.dataTransfer.files);
+				let oFile=ev.dataTransfer.files[0]
+				// oFile.name/size/type...
+				let reader=new FileReader();
+				reader.readAsText(oFile)
+				// reader.readAsArrayBuffer(原始二进制)
+				// reader.readAsBinaryString(二进制文本)
+				// reader.readAsDataURL(base64)
+				reader.onload=function(){
+					console.log(this.result)
+				}
+				ev.preventDefault();	//阻止事件
+			},false);
+		}
+	</script>
+	<body>
+		<div class="box">
+			将文件拖拽至此区域
+		</div>
+		<div class="tab_box">
+			<ul class="oUl">
+				<li class="ali active">首页</li>
+				<li class="ali">aaaa</li>
+				<li class="ali">bbbbb</li>
+				<li class="ber"></li>
+			</ul>
+		</div>
+	</body>
+	<script>
+		// window.onload=function(){
+		// 	let ali=document.querySelectorAll('.ali');
+		// 	let ber=document.querySelector('.ber');
+		// 	let oneAliLeft=ali[0].getBoundingClientRect().left;
+		// 	ali.forEach((item)=>{
+		// 		item.addEventListener('click',function(ev){
+		// 			let t_left=this.getBoundingClientRect().left;
+		// 			let activeBerLeft=t_left - oneAliLeft;
+		// 			ber.style.transform='translateX('+activeBerLeft+'px)';
+		// 			this.classList.add('active');
+		// 			siblingElement(this).forEach((r_item)=>{
+		// 				r_item.classList.remove('active');
+		// 			})
+		// 		})	
+		// 	});
+			
+		// };
+		// //模仿jq-获取当前元素的所有兄弟元素
+		// function siblingElement(elem){
+		// 	var nodes=[];
+		// 	var _elem=elem;
+		// 	while((elem=elem.previousSibling)){	//获取当前元素所有前面的兄弟元素
+		// 		if(elem.nodeType==1){
+		// 			nodes.push(elem);
+		// 		}
+		// 	}
+		// 	var elem=_elem;
+		// 	while((elem=elem.nextSibling)){	//获取当前元素所有后面的兄弟元素
+		// 		if(elem.nodeType==1){
+		// 			nodes.push(elem);
+		// 		}
+		// 	}
+		// 	return nodes;
+		// }
+	</script>
+</html>

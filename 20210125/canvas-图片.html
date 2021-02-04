@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		body{background-color: #000000;text-align: center;}
+		#c1{
+			background-color: #fff;	
+		}
+	</style>
+	<body>
+		<canvas id="c1" width="600" height="400"></canvas>
+	</body>
+	<script>
+		function d2a(n){
+			return n*Math.PI/180;
+		}
+		window.onload=function(){
+			let oC=document.getElementById('c1');
+			let gd=oC.getContext('2d');
+			
+			let oImg=new Image();
+			
+			oImg.src='imgs/youxi.jpg'
+			 
+			oImg.onload=function(){
+				//图片-简易版
+				// gd.drawImage(oImg,0,0);
+				let frame=0;
+				let dir='d';
+				let x=100,y=100;
+				const speed=5;
+				document.onkeydown=function(ev){
+					let keys={37:'l',38:'u',39:'r',40:'d'};
+					dir=keys[ev.keyCode]||dir;
+					switch(dir){
+						case 'l':
+							x-=speed;
+							break;
+						case 'r':
+							x+=speed;
+							break;
+						case 'u':
+							y-=speed;
+							break;
+						case 'd':
+							y+=speed;
+						break;	
+					}
+				}
+				
+				
+				setInterval(()=>{
+					gd.clearRect(0,0,oC.width,oC.height);
+					
+					let rows={'d':0,'l':1,'r':2,'u':3};
+					//图片-完整版
+					gd.drawImage(
+						oImg,
+						2+33*frame,32*rows[dir],27,31,
+						x,y,27,31
+					);
+					
+					
+					
+					frame++;
+					if(frame==3){
+						frame=0;
+					}
+				},100)
+				
+			}
+		}
+	</script>
+</html>

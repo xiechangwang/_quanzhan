@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="hammer.js"></script>
+		<script>
+			window.onload=function(){
+				let oBox=document.querySelector('.box');
+				let hammertime = new Hammer(oBox, {});
+				
+				//快速点击 <250ms
+				hammertime.on('tap', function(ev) {
+					console.log(ev);
+				})
+				//长按>250ms
+				hammertime.on('press', function(ev) {
+					console.log(ev);
+				})
+				
+				//拖拽
+				hammertime.on('pan', function(ev) {
+					console.log('1111');
+				})
+				
+				//滑动
+				hammertime.on('swipe', function(ev) {
+					console.log('2222');
+				})
+			}
+		</script>
+		<style type="text/css">
+			.box{
+				width: 200px;
+				height: 200px;
+				background-color: royalblue;
+				margin: 50px auto 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box"></div>
+	</body>
+</html>

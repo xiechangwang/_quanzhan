@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		body{background-color: #000000;text-align: center;}
+		#c1{
+			background-color: #fff;	
+		}
+	</style>
+	<body>
+		<canvas id="c1" width="600" height="400"></canvas>
+		<button type="button" class="btn1">变灰</button>
+		<button type="button" class="btn4">导出</button>
+	</body>
+	<script>
+		function d2a(n){
+			return n*Math.PI/180;
+		}
+		window.onload=function(){
+			let oC=document.getElementById('c1');
+			let btn1=document.querySelector('.btn1');
+			let btn4=document.querySelector('.btn4');
+			let gd=oC.getContext('2d');
+			
+			let oImg=new Image();
+			
+			oImg.src='imgs/youxi.jpg'
+			 
+			oImg.onload=function(){
+				gd.drawImage(oImg,0,0);
+				
+				//获取像素区
+				let imgData=gd.getImageData(0,0,oC.width,oC.height);
+				
+				//600列（宽）
+				//400行（高）
+				//r:高*宽*4		=>(行*oC.width+列)*4
+				//g:高*宽*4+1	=>(行*oC.width+列)*4+1
+				//b:高*宽*4+2	=>(行*oC.width+列)*4+2
+				//a:高*宽*4+3	=>(行*oC.width+列)*4+3
+				
+				//变灰
+				btn1.addEventListener('click',()=>{
+					for(let r=0;r<oC.height;r++){
+						for(let c=0;c<oC.width;c++){
+							let avg=(parseInt(imgData.data[(r*oC.width+c)*4])+parseInt(imgData.data[(r * oC.width + c) * 4 + 1])+parseInt(imgData.data[(r * oC.width + c) * 4 + 2]))/3;	
+							imgData.data[(r*oC.width+c)*4]=imgData.data[(r * oC.width + c) * 4 + 1]=imgData.data[(r * oC.width + c) * 4 + 2]=avg;
+						}
+					}
+					gd.putImageData(imgData,0,0);
+					
+				})
+				
+				//导出
+				btn4.addEventListener('click',()=>{
+					//导出图片
+					let str=oC.toDataURL();
+				})
+			}
+		}
+	</script>
+</html>

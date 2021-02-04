@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style>
+		body{
+			background-color: #000000;
+		}
+		#c1{
+			background-color: #fff;
+		}
+	</style>
+	<script>
+		function d2a(ang){
+			return ang*Math.PI/180;
+		}
+		window.onload=function(){
+			//数据	
+			let oC=document.querySelector('#c1');
+			let gd=oC.getContext('2d');	//获取-绘图用的接口
+			let cx=400,cy=300,r=150;
+			gd.strokeText('123',0,100);
+			gd.fillText('456',0,200);
+			gd.font='50px 黑体';
+			function pic(statrtAng,endAng,color){
+				gd.beginPath();
+				//1
+				gd.moveTo(cx,cy);
+				//x=cx+sin(statrtA)*r
+				let x=cx+Math.sin(d2a(statrtAng))*r;
+				//y=cy-cos(endA)*r
+				let y=cy-Math.cos(d2a(statrtAng))*r
+				gd.lineTo(x,y)
+				//2
+				//gd.arc(cx,cy,r,起始点,终止点,逆时针)
+				gd.arc(cx,cy,r,d2a(statrtAng - 90),d2a(endAng - 90),false);
+				//3
+				gd.closePath();
+				gd.fillStyle=color
+				gd.fill();
+			}
+			
+			//数据
+			let data=[581,273,1750,201,350,480,870,670];
+			let colors=['#e6882d','#e6432d','#e62d96','#952de6','#592de6','#2d66e6','#2db0e6','#2de6b4']
+			
+			//综合
+			let sum=data.reduce((tmp,item,index)=>tmp+item);
+			
+			//占比
+			let angs=data.map(item=>{
+				// 360*item/sum
+				return 360*item/sum;
+			});
+			
+			//上一个结束作为下一个开始
+			let last=0;
+			angs.forEach((ang,index)=>{
+				console.log(ang)
+				pic(last,last+ang,colors[index]);
+				last+=ang;
+			});
+		};
+	</script>
+	<body>
+		<canvas id="c1" width="800" height="600">
+			您的浏览器不支持canvas
+		</canvas>
+	</body>
+</html>

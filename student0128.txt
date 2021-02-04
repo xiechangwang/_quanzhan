@@ -1,0 +1,24 @@
+canvas-video
+
+base64=>保存成文件
+fs.writeFile(`./static/${uuidv4().replace(/\-/g,'')}.png`,str,"base64",err=>{
+	if(err){
+		res.writeHead(200, {'Content-Type': 'text/plain;charset=utf-8'})
+		res.writeHeader(500);
+		res.write('weite file error');
+	}else{
+		res.writeHead(200, {'Content-Type': 'text/plain;charset=utf-8'})
+		res.write('成功');
+	}
+		res.end();
+})	
+
+------------------------------------------------------
+1、移动端
+	布局
+		viewport（视口）	浏览器的分辨率
+	touch-多点
+	
+2、图形
+	canvas	位图		不能存储图形信息-没法修改、没有事件；性能高
+	svg/vml	矢量图		存储图像信息-便于修改、事件；性能一般

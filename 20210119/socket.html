@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			p{padding: 0;margin: 0;}
+			.mine{
+				color: #008080;
+			}
+		</style>
+		<!-- <script src="http://localhost:8080/socket.io/socket.io.js"></script> -->
+		<script src="https://cdn.bootcdn.net/ajax/libs/socket.io/3.0.0-rc4/socket.io.js"></script>
+		<script type="text/javascript">
+			var sock=io.connect('ws://localhost:8080/');
+			
+			window.onload=function(){
+				var cur_name="";
+				var regbtn=document.querySelector('.regs');
+				var loginBtn=document.querySelector('.login');
+				var user=document.querySelector('.user'),
+					pass=document.querySelector('.pass');
+				sock.on('reg_ret',(code,msg)=>{
+					if(code){
+						alert('失败'+msg)
+					}else{
+						alert('注册成功')
+						
+					}	
+				})	
+				regbtn.onclick=function(){
+					sock.emit('reg',user.value,pass.value);
+				};
+				sock.on('login_ret',(code,msg)=>{
+					if(code){
+						alert('失败'+msg)
+					}else{
+						alert('成功');
+						cur_name=user.value;
+					}	
+				})	
+				loginBtn.onclick=function(){
+					sock.emit('login',user.value,pass.value);
+				};
+				
+				
+				/******************************************/
+				var oUl=document.querySelector('#oUl'),
+					txt1=document.querySelector('#txt1'),
+					btn_sen=document.querySelector('#btn_send');
+				//消息
+				sock.on('msg_ret',(code,msg)=>{
+					if(code){
+						alert('消息发送失败');
+					}else{
+						var ali=document.createElement('li');
+							ali.className='mine';
+							ali.innerHTML=`<h4>${cur_name}</h4><p>${txt1.value}</p>`;
+							oUl.appendChild(ali);
+							txt1.value="";	
+					}
+				});
+				sock.on('msg',(name,txt)=>{
+					var ali=document.createElement('li');
+						ali.innerHTML=`<h4>${name}</h4><p>${txt}</p>`;
+						oUl.appendChild(ali);
+						txt1.value="";
+				});
+				btn_sen.onclick=function(){
+					sock.emit('msg',txt1.value);
+				}
+				
+			}
+			
+		</script>
+	</head>
+	<body>
+		<div>
+			<form>
+				账户：<input type="text" name="user" class="user"/>
+				<br/>
+				密码：<input type="password" name="pass" class="pass"/>
+				<br/>
+				<button type="button" class="regs">注册</button>
+				<button type="button" class="login">登录</button>
+				<hr/>
+				<textarea id="txt1" rows="4" cols="22"></textarea>
+				<br/>
+				<input type="button" value="发送" id="btn_send"/>
+			</form>
+			<ul id="oUl">
+				
+			</ul>
+		</div>
+	</body>
+</html>

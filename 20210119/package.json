@@ -1,0 +1,18 @@
+{
+  "name": "20210119",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mysql.js",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "jquery": "^3.5.1",
+    "socket.io": "^3.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

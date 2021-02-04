@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style>
+		body{
+			background-color: #000000;
+		}
+		#c1{
+			background-color: #fff;
+		}
+	</style>
+	<script>
+		window.onload=function(){
+			let oC=document.querySelector('#c1');
+			let gd=oC.getContext('2d');	//获取-绘图用的接口
+			//路径操作-ps的选取一样-需要做填充或描边才能显示
+			gd.moveTo(100,100);	//起点
+			gd.lineTo(300,200);	//接下来路径
+			gd.lineTo(130,260);
+			gd.lineTo(100,100);
+			gd.strokeStyle='red';	//描边-填色
+			gd.stroke();	//描线||描边
+			gd.fillStyle='yellow';	//填充-填色
+			gd.fill();	//填充
+		};
+	</script>
+	<body>
+		<canvas id="c1" width="300" height="300">
+			您的浏览器不支持canvas
+		</canvas>
+	</body>
+</html>

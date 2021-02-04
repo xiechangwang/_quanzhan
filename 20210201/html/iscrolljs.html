@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width-device-width,initial-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="iscroll-probe.js"></script>
+		<style type="text/css">
+			.wrap{width: 300px;height: 300px;background-color: #ccc;overflow: hidden;margin: 50px auto 0;position: relative;}
+			.content{width: 800px;height: 800px;background:-webkit-linear-gradient(left top ,red,green);color: white;position: relative;z-index: 2;}
+			.dropdown{width:100%;text-align:center;position: absolute;left: 0;top: 0;z-index: 1;line-height: 30px;}
+		</style>
+		<script>
+			window.onload=function(){
+				let dropdown=document.querySelector('.dropdown');
+				let content=document.querySelector('.content');
+				
+				
+				
+				
+				/******probeType:2的下拉刷新*******/
+				/*
+				let iscroll=new IScroll('.wrap',{probeType:2});
+				let scrollYBeforeRelease=0;	//自定义手指移动距离
+				iscroll.on('scrollStart',function(){
+					scrollYBeforeRelease=0;
+				});
+				iscroll.on('scroll',function(){
+					if(iscroll.y>=100){
+						dropdown.innerHTML='松手刷新';
+					}else{
+						dropdown.innerHTML='下拉加载';
+					}
+					scrollYBeforeRelease=iscroll.y;
+				});
+				
+				iscroll.on('scrollEnd',function(){
+					if(scrollYBeforeRelease>=100){
+						//刷新
+						//ajax
+						console.log('刷新吧。。。。')
+					}else{
+						console.log('不用刷新');	
+					}
+				});
+				*/
+			   
+			   
+			   /******probeType:3的下拉刷新*******/
+			   let iscroll=new IScroll('.wrap',{probeType:3});
+			   let scrollYBeforeRelease=0;
+			   iscroll.on('scrollStart',function(){
+				   content.style.marginTop="0";
+				   content.style.transition='';
+				   
+				   iscroll.endTime=0;
+				   scrollYBeforeRelease=0;
+				   iscroll.on('scroll',fnScroll);
+			   });
+			   iscroll.on('scrollEnd',()=>{
+				   if(scrollYBeforeRelease>=150){
+						setTimeout(()=>{
+							dropdown.innerHTML='加载完成...';
+							content.style.transition='all 0.5s';
+							content.style.marginTop="0";
+						},2000);
+				   }
+				  
+			   });
+			   function fnScroll(ev){
+				   if(iscroll.endTime==0){	//还在拖的过程中
+				   	if(iscroll.y>=150){
+				   	   	dropdown.innerHTML='松手刷新';
+				   	}else{
+				   	   	dropdown.innerHTML='下拉加载';
+				   	 }
+				   }else{	//松手了
+						iscroll.off('scroll',fnScroll);
+				   		if(iscroll.y>=150){
+							content.style.marginTop=`30px`;
+				   			dropdown.innerHTML='加载中...';
+						}
+				   }
+				   scrollYBeforeRelease=iscroll.y;
+			   }
+			}
+		</script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="content"></div>
+			<div class="dropdown">下拉刷新</div>
+		</div>
+	</body>
+</html>

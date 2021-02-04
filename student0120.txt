@@ -1,0 +1,21 @@
+http2.0(实验性)
+1、强制https。
+2、性能更高-面向流、头压缩、多路复用。
+3、双向通行-服务器推送。
+
+ajax2.0  ie10+
+1、formData
+	formData-容器
+	set/get/append
+2、文件上传、上传进度监控
+	formDate.set('名字',<input type="file"/>)
+	xhr.upload.onload	上传完成
+	xhr.upload.onprogress	进度变化
+3、cors跨域*
+
+
+jsonp跨域
+
+webSocket原理
+
+html5新特性

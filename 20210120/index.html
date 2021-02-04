@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<button id="ben_send">btn</button>
+	</body>
+	<script>
+		var btn=document.getElementById('ben_send');
+		btn.onclick=function(){
+				var xhr=new XMLHttpRequest();
+				xhr.open('post','http://localhost:5050',true);
+				xhr.send();
+				xhr.onreadystatechange=function(res){
+					console.log(res)
+				}
+		}
+		
+	</script>
+</html>

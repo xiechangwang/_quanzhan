@@ -1,0 +1,41 @@
+SVG图形
+1、样式操作		跟html一样（推荐style）
+2、事件操作		跟html一样
+3、属性操作
+	HTML{
+		设置:{
+			xx.xx=xxx;
+			xx.setAttrbute('xx','xxx');
+		}
+		获取:{
+			xx.xx;
+			xx.getAttrbute('xx');
+		}
+	}	
+	SVG{	//操作方式更像XML
+		设置:{
+			xx.setAttrbute('xx','xxx');
+		}
+		获取:{
+			xx.getAttrbute('xx');
+		}	
+	}
+4、DOM操作
+	获取	和html一样
+	创建
+		HTML:{
+			createElement('xxx');
+		}
+		SVG:{
+			createElementNS('http://www.w3.org/2000/svg','xxx');
+		}
+------------------------------------
+图形（标签）
+	1、rect		矩形
+	2、circle	正圆
+	3、ellipse	椭圆
+	4、line		直线
+	5、多边形
+	6、
+
+动画		
