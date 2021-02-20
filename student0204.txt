@@ -29,13 +29,134 @@ SVG图形
 		SVG:{
 			createElementNS('http://www.w3.org/2000/svg','xxx');
 		}
+*样式
+	描边:stroke
+	填充:fill
+
+*注意fill=none导致背景色透明--没有事件
 ------------------------------------
 图形（标签）
-	1、rect		矩形
-	2、circle	正圆
-	3、ellipse	椭圆
-	4、line		直线
+	1、rect		矩形	x,y,width,height,rx,ry
+	2、circle	正圆	cx,cy,r	
+	3、ellipse	椭圆	cx,cy,rx,ry 	
+	4、line		直线	x1,y1,x2,y2
 	5、多边形
-	6、
+	6、path		路径	M	起点	x,y
+						L	绘画路径	x,y--多个
+						Z	闭合	没有参数
+						A	画弧形{
+								(rx ry x-axis-rotation large-arc-flag sweep-flag x y)+
+								
+								rx ry 是椭圆的两个半轴的长度。
+								
+								x-axis-rotation 是椭圆相对于坐标系的旋转角度，角度数而非弧度数。
+								
+								large-arc-flag 是标记绘制大弧(1)还是小弧(0)部分。
+								
+								sweep-flag 是标记向顺时针(1)还是逆时针(0)方向绘制。
+								
+								x y 是圆弧终点的坐标。
+							}
+--------------------------------------
+M,L,A,Z以外还有什么
+
+H
+V
+C
+Q
+--------------------------------------
+*第三方库
+svg、vml---Raphael.js
+
+d3.js			绘图库	
+echarts.js		图表
+--------------------------------------
+VML(1,2是必须加)
+	1、加个xmlns
+		<html xmlns:v="urn:schemas-microsoft-com:vml">
+	2、加个样式
+		<style>
+			v\:*{behavior:url(#default#VML)}
+		</style>
+	
+	*vml标签
+		
+		线
+		v:line{
+			//只能属性操作---样式没用
+			form="x,y" to="x,y"	strokecolor="" strokeweight="线粗" 
+		}
+		
+		圆(样式中要加px单位)
+		v:oval{
+			style="left;top;width;height;position:absolute"
+		}	
+		
+		矩形(样式中要加px单位)
+		v:rect{
+			style="left;top;width;height;position:absolute"
+		}
+					  
+		路径
+		v:shape{
+			style="width: 1000px;height: 1000px;border: 1px solid #f00;" 
+			path="M 200 100 L 300 400 100 400 X"
+		}
+					  
+--------------------------------------
+Raphael.js
+	1、在浏览器窗口上创建画布			
+		var paper = Raphael(l, t, w, h); 	
+	2、创建形状
+		var rect = paper.rect(x, y, w, h,r);
+	3、设置属性
+		rect.attr('属性名','值')||rect.attr({'属性名':'值'})
+	4、事件
+		rect.click(fn);	//添加事件
+		rect.unclick(fn);  //删除事件
+	5、transform(变换)
+		this.transform("r30");
+		有四个命令：t是平移，r是旋转，s是缩放，m是矩阵。
+	6、动画
+		animate--属性、时间、缓动类型和回调函数（params ms easing callback）
+		{
+			缓动类型:
+				“linear” （线性）
+				“<”或“easeIn”或“ease-in” （由慢到快）
+				“>”或“easeOut”或“ease-out”（又快到慢）
+				“<>”或“easeInOut”或“ease-in-out”（由慢到快再到慢）
+				“backIn”或“back-in”（开始时回弹）
+				“backOut”或“back-out”（结束时回弹）
+				“elastic”（橡皮筋）
+				“bounce”（弹跳）
+		}
+		
+	
+	---------------------------------
+	rect(矩形)		x,y,w,h,r	
+	---------------------------------
+	circle(正圆)	cx,cy,r
+	---------------------------------
+	ellipse(椭圆)	cx,cy,xr,yr
+	---------------------------------
+	image(图片)		src,x,y,width,height	（源图像的URI、x坐标、y坐标、宽度、高度）
+	---------------------------------
+	path(路径)		M,L,A,H,V,Q,Z...
+	---------------------------------
+	text(文字)		x, y, text
+--------------------------------------
+echarts
+
+1、查看配置项
+
+2、结合实例定制参数
+
+--------------------------------------
+d3.js
+
+1、计算
+2、生成
+
+--------------------------------------
 
 动画		

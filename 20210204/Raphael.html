@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.js"></script>
+		<script>
+			window.onload=function(){
+				let btn=document.querySelector('#btn');
+				
+				var paper = Raphael(0, 60, 800, 1000); // 在浏览器窗口上创建画布
+				var rect = paper.rect(120, 600, 50, 50);
+				rect.attr('fill','#f00')
+				rect.click(function(){
+					// this.attr('fill','#ff0')
+					// this.transform("r30");
+					this.animate({'transform':'r30'},1000,'easeInOut')
+				})
+				
+				let types=['linear','easeIn','easeOut','easeInOut','backIn','backOut','elastic','bounce'];
+				let rects=types.map((type,index)=>{
+					let oRect=paper.rect(0,60*index,50,50);
+					oRect.attr('fill','#ff0');
+					return oRect;
+				});
+				
+				btn.addEventListener('click',function(){
+					rects.forEach((item,index)=>{
+						item.animate({'x':300},2000,types[index])
+					})
+				});
+				
+				//三条线
+				let path=paper.path('M 100 350 L 200 350 M 100 380 L 200 380 M 100 410 L 200 410');
+				path.attr({'stroke-width':10});
+				path.attr('cursor','pointer')
+				
+				path.hover(function(){
+					path.animate({'path':'M 100 410 L 200 350 M 150 380 L 151 380 M 100 350 L 200 410'},800,'elastic');
+				},function(){
+					path.animate({'path':'M 100 350 L 200 350 M 100 380 L 200 380 M 100 410 L 200 410'},800,'elastic');
+				})
+			};
+		</script>
+	</head>
+	<body>
+		<button type="button" id="btn">按钮</button>
+	</body>
+</html>

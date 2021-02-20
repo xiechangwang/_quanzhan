@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<svg width="800" height="1000">
+			<!-- 圆 -->
+			<circle cx="100" cy="100" r="100" stroke="red" fill="#fa9"></circle>
+			<!-- 路径 -->
+			<path d="
+				M 100,300
+				L 300,300
+				L 300,400
+				L 100,400
+				z
+			" style="stroke: #f00;fill: none;stroke-width:20;"></path>
+			<!-- path画弧形 -->
+			<path
+				d="
+					M 100,600
+					L 200,600
+					A 100,100,0,0,1,400,600
+					L 500,600	
+				" style="stroke: #000000;fill: none;"></path>
+		</svg>
+	</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script>
+			//角度转弧度
+			function d2a(n){
+				return n*Math.PI/180;
+			}
+			window.onload=function(){
+				let oSvg=document.querySelector('svg');
+				
+				//坐标起点x,y,半径
+				let cx=300,cy=300,r=100;
+				
+				//起始角度startA,结束角度endD
+				function pie(startA,endD,color='none'){
+					let timer=0;
+					
+					//生成元素
+					let oPath=document.createElementNS('http://www.w3.org/2000/svg','path');
+						oPath.style.stroke='none';
+						oPath.style.fill=color;
+						calcPath(r);
+							
+					function calcPath(r){
+						//求x1,y1
+						let x1=cx+Math.sin(d2a(startA))*r;
+						let y1=cy-Math.cos(d2a(startA))*r;
+						
+						//求x2,y2
+						let x2=cx+Math.sin(d2a(endD))*r,
+							y2=cy-Math.cos(d2a(endD))*r;
+						oPath.setAttribute('d',`
+								M ${cx},${cy} 
+								L ${x1},${y1} 
+								A ${r},${r},0,${endD-startA>180?1:0},1,${x2},${y2} 
+								Z`);
+					}	
+						
+					oSvg.appendChild(oPath);
+					oPath.onmouseover=function(){
+						let n=0;
+						let count=10
+						//过度动画
+						clearInterval(timer);
+						timer=setInterval(()=>{
+							n++
+							calcPath(r+20*n/count);
+							if(n==count){
+								clearInterval(timer);
+							}
+						},16);
+					};
+					oPath.onmouseout=function(){
+						let n=0;
+						let count=10
+						//过度动画
+						clearInterval(timer);
+						timer=setInterval(()=>{
+							n++
+							calcPath(r+20-20*n/count);
+							if(n==count){
+								clearInterval(timer);
+							}
+						},16);
+					};
+				};
+				// pie(30,300);
+				
+				//画饼图
+				let data=[200,300,500,600,800];
+				let colors=['#fc0','#c9a','#a58','#6fa','#2ad'];
+				
+				//求和
+				let sum=data.reduce((tmp,item)=>tmp+item);
+				
+				//遍历求角度画饼图
+				let now=0;
+				data.forEach((item,index)=>{
+					let ang=360*item/sum;
+					pie(now,now+ang,colors[index]);
+					now+=ang;
+				})
+			}
+		</script>
+	</head>
+	<body>
+		<svg width="600" height="600"></svg>
+		<img src="饼图解析.png"/>
+	</body>
+</html>
