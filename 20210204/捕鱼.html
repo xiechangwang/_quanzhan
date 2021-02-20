@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			body{background: #000000;text-align: center;}
+			#c1{background: url(img/game_bg_2_hd.jpg)no-repeat;}
+		</style>
+		<script src="common.js"></script>
+		<script>
+			//通用类
+			class Sprite{
+				//w,h,x,y,rotate
+				//draw(),碰撞的检测()
+				constructor(img,width,height,x=0,y=0,rotation=0) {
+				    this.img=img;
+					this.width=width;
+					this.height=height;
+					this.x=x;
+					this.y=y;
+					this.rotation=rotation;
+				}
+				draw(gd){
+					//4、擦除
+					gd.save();
+					
+					//3、位移
+					gd.translate(this.x,this.y);
+					
+					//2、旋转
+					gd.rotate(d2a(this.rotation));
+					
+					//1、加载图
+					gd.drawImage(
+						this.img,
+						0,0,this.width,this.height,
+						-this.width/2,-this.height/2,this.width,this.height
+					);
+				}
+			};
+			
+			
+			window.onload=function(){
+				let oC=document.getElementById('c1');
+				let gd=oC.getContext('2d');
+				
+				loadImgs({
+					fish1:'./img/fish1.png',
+					fish2:'./img/fish2.png',
+				},function(imgs){
+					let fish1=new Sprite(imgs.fish1,55,37);
+							
+							fish1.x=200;
+							fish1.y=150;
+							fish1.rotation=50;
+							fish1.draw(gd);
+							
+							
+				});
+			};
+		</script>
+	</head>
+	<body>
+		<canvas id="c1" width="800" height="600"></canvas>
+	</body>
+</html>

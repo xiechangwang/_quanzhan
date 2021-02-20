@@ -3,6 +3,12 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
+		<script src="https://d3js.org/d3.v3.min.js"></script>
+		<script>
+			// v3版本操作方法
+			var map = d3.map([{name: "foo"}, {name: "bar"}], function(d) { return d.name; });
+			console.log(map.get('foo'))
+		</script>
 	</head>
 	<body>
 	</body>
