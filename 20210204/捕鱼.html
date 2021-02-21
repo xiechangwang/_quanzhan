@@ -13,33 +13,39 @@
 			class Sprite{
 				//w,h,x,y,rotate
 				//draw(),碰撞的检测()
-				constructor(img,width,height,x=0,y=0,rotation=0) {
+				constructor(img,width,height,sx=0,sy=0,x=0,y=0,rotation=0) {
 				    this.img=img;
 					this.width=width;
 					this.height=height;
+					this.sx=sx;
+					this.sy=sy;
 					this.x=x;
 					this.y=y;
 					this.rotation=rotation;
 				}
 				draw(gd){
-					//4、擦除
+					/*一下步骤缺一不可*/ 
+					
+					//4、保存canvas状态（颜色，线宽，旋转，translate，不包括图形本身）
 					gd.save();
 					
 					//3、位移
 					gd.translate(this.x,this.y);
 					
-					//2、旋转
+					//2、旋转，以图片中心旋转
 					gd.rotate(d2a(this.rotation));
 					
 					//1、加载图
 					gd.drawImage(
 						this.img,
-						0,0,this.width,this.height,
+						this.sx,this.sy,this.width,this.height,
 						-this.width/2,-this.height/2,this.width,this.height
 					);
+					//恢复
+					gd.restore();
+					
 				}
 			};
-			
 			
 			window.onload=function(){
 				let oC=document.getElementById('c1');
@@ -50,13 +56,30 @@
 					fish2:'./img/fish2.png',
 				},function(imgs){
 					let fish1=new Sprite(imgs.fish1,55,37);
+						fish1.x=200;
+						fish1.y=150;
+					
+					let tick=0;
+					let i=0;
+					
+					setInterval(()=>{
+						gd.clearRect(0,0,oC.width,oC.height);
+						fish1.rotation++;
+						// fish1.x++;
+						// fish1.sy=fish1.height*i;	//更换sy坐标
+						fish1.draw(gd);
+						
+						//为了不让鱼摇尾巴太频繁
+						tick++;	
+						if(tick==10){
+							tick=0;
 							
-							fish1.x=200;
-							fish1.y=150;
-							fish1.rotation=50;
-							fish1.draw(gd);
-							
-							
+							i++
+							if(i>=4){
+								i=0
+							}	
+						}
+					},16)
 				});
 			};
 		</script>
