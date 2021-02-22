@@ -1,0 +1,35 @@
+const http=require('http');
+const fs=require('fs');
+const url=require('url');
+const zlib=require('zlib');
+
+http.createServer((req,res)=>{
+	let {pathname,query}=url.parse(req.url,true);
+	
+	//被抛弃
+	// fs.readFile(`www${pathname}`,(err,data)=>{
+	// 	if(err){
+	// 		res.writeHeader(404);
+	// 		res.write('not found');
+	// 	}else{
+	// 		res.write(data);
+	// 	}
+	// 	res.end();
+	// })
+	
+	let rs=fs.createReadStream(`www${pathname}`);
+	
+	res.setHeader('Content-Encoding','gzip')
+	
+	let gz=zlib.createGzip();
+	
+	//原始大小7KB	--压缩后只有337B(字节)
+	rs.pipe(gz).pipe(res);
+	
+	rs.on('error',err=>{
+		res.writeHeader(404);
+		res.write('not found');
+		res.end();
+	})
+	
+}).listen(8080);

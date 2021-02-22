@@ -13,9 +13,17 @@ let server=http.createServer((req,res)=>{
 	});
 	req.on('end',()=>{
 		let data=Buffer.concat(aBuffer);	//buffer连接
-		//urlencoded--post默认数据格式
-		const post=queryString.parse(data.toString());
-		console.log(post)
+		//multipart/form-data
+		console.log(data.toString())
+		/*
+		------WebKitFormBoundaryohvCpaiz8H5q74mJ
+		Content-Disposition: form-data; name="f1"; filename="20210205.text"
+		Content-Type: text/plain
+		
+		文件内容区域
+		
+		------WebKitFormBoundaryohvCpaiz8H5q74mJ--
+		*/
 	});
 	
 })

@@ -36,4 +36,73 @@ Node.js
 
 -------------------------------------------------
 
+原生Node--第二十四课node知识
+1、数据处理、文件上传
+2、压缩		zlib
+3、管道操作	stream
+4、接口管理	Router实现
 
+*stream-读一块、发一块
+1、读取流
+2、写入流
+3、读写流-压缩流
+
+*zlib
+zlib.createGzip();
+
+-------------------------------------------------
+当前接触：
+读取流：require(),fs.createReadStream();
+写入流：res,fs.createWriteStream();
+读写流：zlib.createGzip();
+
+-------------------------------------------------
+
+1、压缩文件
+2、压缩网络数据+res.setHeader('Content-Encoding','gzip')  --否则浏览器会误会成为二进制
+
+--------------------------------------------------
+
+setHeader和writeHeader区别：
+setHeader 可以设置无数次
+writeHeader 发送数据前设置的（只能一次）
+
+--------------------------------------------------
+路由(Router)
+-----------------------------------
+EventEmitter-事件队列
+
+	const EventEmitter = require('events');
+	
+	class MyEmitter extends EventEmitter {}
+	
+	const myEmitter = new MyEmitter();
+	myEmitter.on('event', () => {
+	  console.log('触发事件');
+	});
+	myEmitter.emit('event');
+
+-----------------------------------
+node模块
+所有的模块是单例模式（文件不管引几次都是一样的）；
+
+-----------------------------------
+Nodejs
+
+assert（断言）
+
+child_process（子进程）
+
+cluster（集群）
+
+crypto（加密）
+
+dns（域名服务器）
+
+domain（域）--已经弃用
+
+perf_hooks（性能钩子）
+
+os（操作系统）
+
+net（网络）
