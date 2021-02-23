@@ -1,0 +1,78 @@
+Nodejs
+
+assert（断言）
+
+child_process（子进程）
+
+cluster（集群）
+
+crypto（加密）
+
+dns（域名服务器）
+
+domain（域）--已经弃用
+
+perf_hooks（性能钩子）
+
+os（操作系统）
+
+net（网络）
+
+----------------------------------------------
+
+1、多进程/多线程
+	多进程--重：有独立的存储空间
+		优点：安全、简单
+		缺点：性能相对较低
+	多线程--轻：同一个进程内的线程共享空间
+		优点：性能高
+		缺点：不安全、复杂
+	
+	
+	------------------------
+	JS：单进程、非阻塞（异步）
+	前：webWorker多进程
+	node：cluster模块--多进程{
+		如果想穿件进程--分裂（fork）
+		---------------------------
+		只有系统，才能完全全新创造进程：
+		1、通过复制自己创造子进程
+		2、子进程不能再去创造了
+		
+		*一般主进程不干活，纯粹派生子进程；干活的是子进程*
+		
+		const cluster = require('cluster');
+		const os=require('os');
+		
+		//主进程才能fork
+		//isMaster:如果该进程是主进程，则为 true
+		if(cluster.isMaster){
+			// console.log(os.cpus().length)
+			//根据内核创造子进程数量
+			for(let i=0;i<os.cpus().length;i++){
+				cluster.fork();
+			}
+			console.log('主进程');
+		}else{
+			console.log('子进程')
+		}
+	}
+--------------------------------------------------------
+	
+2、框架（Koa、Express）	
+Express	基于回调
+Koa1.x		基于generator/yield
+Koa2.x		过度(兼容1.x和3.x)；
+Koa3.x		基于async/await	
+	---------------------------------------------
+	*Express中间件{
+		1、静态文件访问static()
+		
+		--------next流水线模式--------
+		1、express拆分处理步骤
+		2、express使用get处理数据，req.query
+	}
+		
+		
+		
+		
