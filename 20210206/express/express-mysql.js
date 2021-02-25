@@ -1,6 +1,7 @@
 const express=require('express');
 const mysql=require('mysql');
 const { v4: uuidv4 } = require('uuid');
+const crypto=require('crypto');
 
 let server=express();
 
@@ -48,6 +49,7 @@ server.get('/reg',(req,res,next)=>{
 			if(err){
 				res.send({code:1,msg:'数据库问题2'});
 			}else if(data.length>0){
+				//id重复再调用自己
 				_next();
 			}else{
 				//通过req传递参数
@@ -62,6 +64,11 @@ server.get('/reg',(req,res,next)=>{
 //4.写入
 server.get('/reg',(req,res,next)=>{
 	let {user,pass}=req.query;
+	//pass-md5加密
+	const md5=crypto.createHash('md5');
+	md5.update(pass);
+	pass=md5.digest('hex');
+	
 	//通过req._uuid接收参数
 	db.query(`INSERT INTO user_table (ID,username,password) VALUES('${req._uuid}','${user}','${pass}')`,(err)=>{
 		if(err){

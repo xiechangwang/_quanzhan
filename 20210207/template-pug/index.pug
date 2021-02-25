@@ -1,0 +1,28 @@
+doctype html
+html(lang="en")
+  head
+    title= pageTitle
+    script(type='text/javascript').
+      if (foo) bar(1 + 5)
+  body
+    h1 标题
+    #container.col
+      if true
+        p You are amazing
+      else
+        p 文字
+      p.
+        这是中文大段的发的所发生的是发送到电风扇是的少放点是的但事实上fdsf.
+        阿萨德克拉克登录看
+    ul
+      li= a+b
+      //- js表达式
+      //- datas.forEach((item)=>{
+      //-   li= item  
+      //- })
+      - for(let i=0;i<datas.length;i++)
+        li= datas[i]
+      //- pug自己的for循环 
+    ul.pug
+      for item in datas
+        li= item

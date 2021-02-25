@@ -1,0 +1,56 @@
+*Nodejs--consolidate-ejs模板引擎集成
+
+	//1、选择一种模板引擎
+	server.engine('html',consolidate.ejs)
+
+	//2、指定模板文件的拓展名
+	server.set('view engine', 'html');
+
+	//3、指定模板文件路径
+	server.set('views', './template');
+	
+	//4、渲染相对应的文件名res.render('文件名',{arr:data})	
+	server.get('/aaa',(req,res,next)=>{
+		res.render('index',{arr:data})	
+	})
+	----------------------------------------------
+	*ejs语法
+	--输出表达式
+	<% datas.forEach((item)=>{%>
+		<li>aaa</li>
+	<% })-%>
+	
+	--输出内容(文字、标签)
+	<%= 输出文字-转译输出（html标签->html试题） -%>
+	<%- 输出html-非转译输出（html标签->原样）%>
+	
+	--引入（通过 include，指令将相对于模板路径中的模板片段包含进来）
+	<%- include('user/show.html')%>;		
+	
+	**标签含义**
+	<% '脚本' 标签，用于流程控制，无输出。
+	<%_ 删除其前面的空格符
+	<%= 输出数据到模板（输出是转义 HTML 标签）
+	<%- 输出非转义的数据到模板
+	<%# 注释标签，不执行、不输出内容
+	<%% 输出字符串 '<%'
+	%> 一般结束标签
+	-%> 删除紧随其后的换行符
+	_%> 将结束标签后面的空格符删除
+	----------------------------------------------
+	
+	*pug模板
+	**注意所有的缩进只能空格、不能tab缩进**
+	1、缩进格式
+	2、内容：空格，然后写内容
+	3、简写
+		id-div#id
+		class-div.classname
+		属性-div(xx=xxx,xx=xxx,xx=xx)
+	4、输出大量内容
+		标签后加.--换行缩进格式像python
+	5、想写js
+	   - js内容：
+		   - arr.forEach((item)=>{
+		     li= item 
+		   - })	

@@ -71,8 +71,107 @@ Koa3.x		基于async/await
 		--------next流水线模式--------
 		1、express拆分处理步骤
 		2、express使用get处理数据，req.query
-	}
 		
+		*crypto（加密）---pass-md5加密
+			const md5=crypto.createHash('md5');
+			md5.update(pass);
+			pass=md5.digest('hex');
+			
+		---bodyParser--post数据中间件---
+		const express = require('express')
+		const bodyParser = require('body-parser')
+		 
+		let app = express()
+		 
+		// 将各种不同的定制JSON类型解析为JSON
+		app.use(bodyParser.json({ type: 'application/*+json' }))
+		 
+		//把一些自定义的东西解析到缓冲区中
+		app.use(bodyParser.raw({ type: 'application/vnd.custom-type' }))
+		 
+		//将HTML正文解析为字符串
+		app.use(bodyParser.text({ type: 'text/html' }))	
+		
+		//创建应用程序/ x-www-form-urlencoded解析器
+		var urlencodedParser = bodyParser.urlencoded({ extended: false })
+		
+		app.post('/login', urlencodedParser, function (req, res) {
+		  res.send('welcome, ' + req.body.username)
+		})
+		
+		*中间件是从上向下执行，顺序不能逆转
+		
+		---------------------------------------------------------------------
+		*响应方式：
+		res.send
+		res.sendFile			控制读文件--相对路径需要和path模块一起用
+		res.sendStatus(code,msg)	404
+		res.redirect(url)		重定向
+		
+		*上传文件：multer中间件 npm i multer
+		1
+		var multer  = require('multer')
+		2
+		var upload = multer({ dest: 'uploads/' });
+		3
+		server.post('/profile', upload.any(), function (req, res, next) {
+		  // req.files 
+		})
+		
+		---------------------------------------------------------------------	
+		
+	}
+	
+----------------------------------------
+cookie/session
+1、cookie-浏览器存数据，在请求服务器时候，会被带到请求里面
+	缺点：容量小（4kb），不安全（用户随意篡改）
+2、session-只存在于服务器端
+	有点：容量不限、安全（用户碰不到）
+	
+session基于cookie	
+风险：如果sess_id泄露-session劫持
+1、提醒用户不要在f12在console里面乱输入
+2、sess_id做的复杂，做个有效期
+	
+*服务端用法：
+cookie：{
+	1、设置 res.cookie(name,value,options)
+	2、读取	req.cookies
+	*3、安全（防篡改）{
+			---------------------------------------
+			cookieParser初始化时，传入secret（参数）作为签名的秘钥。
+			设置cookie时，将signed设置为true，表示对cookie进行签名。
+			获取cookie时，可以同时通过req.cookies，也可以通过req.signedCookies获取。
+			res.cookie('pass','123456'{
+				//domain
+				//expires:date	有效时间
+				//maxAge:int
+				//path
+				//secure:true	只用于https
+				//signed:true	
+			})
+			--------------------------------------	
+		（1）不是所有cookie信息都敏感
+		（2）签名会使得cookie体积增大
+	}
+}	
+session：{
+	1、设置	req.session
+	2、读取	req.session.xx=xx
+	*3、安全（防篡改）
+		---------------------------
+		session			sess_id
+		session.sig		sess_id签名
+		---------------------------
+}	
+----------fs模块------------------------
+	*appendFile(path, data[, options], callback)*
+	添加数据内容区别于writeFile直接替换内容
+	fs.appendFile('文件.txt', '追加的数据', (err) => {
+	  if (err) throw err;
+	  console.log('数据已被追加到文件');
+	});	
 		
 		
 		
