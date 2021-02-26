@@ -1,0 +1,1 @@
+INSERT INTO `admin_table`(`ID`, `username`, `password`, `b_house`, `b_ad`, `b_link`, `b_broker`) VALUES ('11ef66f4bcdf4446837a2eb8c6ced7bd', 'zhangsan', 'e10adc3949ba59abbe56e057f20f883e', b'1', b'0', b'0', b'1');
