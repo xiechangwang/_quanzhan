@@ -1,8 +1,38 @@
-1、数据字典
+1、数据字典{
+	a：管理员表--admin{
+		ID			varchar(32) 	用户的id，由uuid负责生成、全局唯一		主键、非空
+		username	varchar(32)		用户名、不能重复							非空、唯一
+		password	varchar(32)		密码									非空
+	}
+	b：管理员token表--admin_token{
+		ID
+		token				varchar(32)
+		expires(有效时间) 	int
+		
+	}
+	c：房屋表--house{
+		ID
+		
+	}
+	d：广告表--ad{
+		ID
+		
+	}
+	e：友情链接--link{
+		ID
+	}
+	f：职业顾问表--broker{
+		ID	
+	}
+}
+
 2、接口字典
-3、管理后台-bootstrap
-	用户身份管理-cookie/session
-	跨域请求数据-token
+3、管理后台-bootstrap{
+	a:用户状态管理
+	b:增删改查
+}
+	*用户身份管理-cookie/session
+	*跨域请求数据-token	
 ------------------------------------
 前端页面（服务端渲染）
 ------------------------------------
@@ -17,6 +47,7 @@
 	var router_reg = express.Router([options])
 	server.use('/reg',router_user);
 	router_reg.get('/',(req,res)=>{...});
+	
 }
 ------------------------------------
 服务端渲染{
