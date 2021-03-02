@@ -55,3 +55,8 @@
 	pug-侵入式：自己的代码格式
 }
 ------------------------------------
+LIMIT start,count
+LIKE '%'
+
+获取表的总数
+SELECT COUNT(*) AS C FROM house_table

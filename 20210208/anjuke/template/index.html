@@ -3,8 +3,246 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<style>
+			*{margin: 0;padding: 0;list-style: none;}
+			.nav_bar{
+				height: 65px;
+				background-color: #A7DBD8;
+				margin-bottom: 14px;
+		</style>
 	</head>
 	<body>
-		aaaaa
+		<div class="wrapper">
+			<div class="nav_bar"></div>
+			<div class="content_wrapper">
+				<div class="container" style="width: 100% !important;">
+					<div class="row">
+						<div class="col-md-2">col-sm-8</div>
+						<div class="col-md-10">
+							<form class="form-horizontal" role="form">
+								<div class="row">
+									<div class="col-md-1">
+										<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">新建</button>
+									</div>
+									<div class="col-md-1">
+										<button type="button" class="btn btn-default oDelBtn">删除</button>
+									</div>
+									<div class="input-group col-md-6" style="width: 300px;">
+										<input type="text" class="form-control">
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button">搜索</button>
+										</span>
+									</div>
+								</div>
+								<div class="table_box">
+									<table class="table table-bordered">
+										<caption>基本的表格布局</caption>
+										<thead>
+											<tr>
+												<th>
+													<label>
+														<input type="checkbox" onchange="oCheck(event)" />
+														ID
+													</label>
+												</th>
+												<th>标题</th>
+												<th>均价</th>
+												<th>电话</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>
+											<% data.forEach((item)=>{%>
+											<tr>
+												<td style="width: 300px;">
+													<label>
+														<input type="checkbox" name="ID_check" value="<%= item.ID%>"/>
+														<%= item.ID%>
+													</label>
+												</td>
+												<td>
+													<%= item.title%>
+												</td>
+												<td>
+													<%= item.ave_pice%>
+												</td>
+												<td>
+													<%= item.tel%>
+												</td>
+												<td style="width: 120px;">
+													<a href="javascript:;">编辑</a>
+													<a href="/admin/house/delete?id=<%= item.ID%>" onclick="return confirm('确定删除吗？删除不可撤销')">删除</a>
+												</td>
+											</tr>
+											<% })-%>
+										</tbody>
+									</table>
+									<ul class="pagination">
+										<li><a href="?page=<%= cur_page==1?cur_page:cur_page-1%>">&laquo;</a></li>
+										<% for(let page=1;page<=page_count;page++){%>
+											<% if(cur_page==page){%>
+												<li class="active"><a href="?page=<%= page%>"><%= page%></a></li>
+											<% } else { %>
+												<li><a href="?page=<%= page%>"><%= page%></a></li>
+											<% } %>
+											
+										<% } %>
+										
+										<!-- <li><a href="#">2</a></li>
+										<li><a href="#">3</a></li>
+										<li><a href="#">4</a></li>
+										<li><a href="#">5</a></li> -->
+										<li><a href="?page=<%= cur_page>=page_count?cur_page:Number(cur_page)+Number(1)%>">&raquo;</a></li>
+									</ul>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content" style="padding:0 20px 0 20px;">
+					<div>
+						<h5 style="font-size:22px;font-weight: 666;padding-bottom:10px;">新增</h5>
+					</div>
+					<form role="form" class="form-horizontal" action="?" method="post" enctype="multipart/form-data">
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">标题</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="title" placeholder="请输入">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">副标题</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="sub_title" placeholder="请输入">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">主位置</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="position_main" placeholder="请输入">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">副位置</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="position_second"  placeholder="请输入">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">价格</label>
+							<div class="col-sm-10">
+								<input type="number" class="form-control" name="ave_pice" placeholder="请输入">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">最小面积</label>
+							<div class="col-sm-10">
+								<input type="number" class="form-control" name="area_min" placeholder="请输入">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">最大面积</label>
+							<div class="col-sm-10">
+								<input type="number" class="form-control" name="area_max" placeholder="请输入">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">电话</label>
+							<div class="col-sm-10">
+								<input type="tel" class="form-control" name="tel" placeholder="请输入">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">开盘时间</label>
+							<div class="col-sm-10">
+								<input type="date" class="form-control" name="sale_time" placeholder="请输入">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">结束时间</label>
+							<div class="col-sm-10">
+								<input type="date" class="form-control" name="submit_time" placeholder="请输入">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">房屋类型</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="building_type"  placeholder="请输入">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputfile" class="col-sm-2 control-label">大图</label>
+							<div class="col-sm-10">
+								<input type="file" name="main_img_path">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputfile" class="col-sm-3 control-label">小图（可多选）</label>
+							<div class="col-sm-10">
+								<input type="file" multiple name="img_paths">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputfile" class="col-sm-3 control-label">户型图（可多选）</label>
+							<div class="col-sm-10">
+								<input type="file" multiple name="property_img_paths">
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+							</button>
+							<button type="submit" class="btn btn-primary">
+								提交
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<script>
+			
+			//批量删除
+			let oBtnDelBtn=$('.oDelBtn');
+			let aCheck=Array.from($('[name="ID_check"]'));
+			
+			oBtnDelBtn.click(function(){
+				let arr=[];
+				aCheck.forEach(ch=>{
+					if(ch.checked){
+						arr.push(ch.value);
+					}
+				})
+				if(arr.length==0){
+					alert('请选择要删除的数据')
+				}else if(confirm(`确定删除${arr.length}条数据嘛`)){
+					let url=`/admin/house/delete?id=${encodeURIComponent(arr.join())}`;
+					window.location.href=url;
+				}	
+			})
+			
+			function oCheck(ev){
+				let oChecked=ev.target.checked;
+				if(oChecked){
+					aCheck.forEach((m,i)=>{
+						$("[name='ID_check']").eq(i).prop('checked',true);
+					})
+				}else{
+					aCheck.forEach((m,i)=>{
+						$("[name='ID_check']").eq(i).prop('checked',false);
+					})
+				}
+				
+				
+			}
+		</script>
 	</body>
 </html>
