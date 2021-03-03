@@ -25,17 +25,19 @@
 							<form class="form-horizontal" role="form">
 								<div class="row">
 									<div class="col-md-1">
-										<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">新建</button>
+										<button type="button" class="btn btn-default" onclick="add_modal()">新建</button>
 									</div>
 									<div class="col-md-1">
 										<button type="button" class="btn btn-default oDelBtn">删除</button>
 									</div>
 									<div class="input-group col-md-6" style="width: 300px;">
-										<input type="text" class="form-control">
-										<span class="input-group-btn">
-											<button class="btn btn-default" type="button">搜索</button>
-										</span>
-									</div>
+										<form action="?" method="get" enctype="application/x-www-form-urlencoded">
+											<input type="text" class="form-control" name="keyWord" value="<%= keyword%>">
+											<span class="input-group-btn">
+												<input type="submit" class="btn btn-default" value="搜索">
+											</span>
+										</form>
+										
 								</div>
 								<div class="table_box">
 									<table class="table table-bordered">
@@ -48,9 +50,12 @@
 														ID
 													</label>
 												</th>
-												<th>标题</th>
-												<th>均价</th>
-												<th>电话</th>
+												<% 
+												for(let name in headerData){
+													if(name=='ID')	continue
+												%>
+													<th><%= headerData[name]%></th>
+												<% } %>
 												<th>操作</th>
 											</tr>
 										</thead>
@@ -63,17 +68,16 @@
 														<%= item.ID%>
 													</label>
 												</td>
-												<td>
-													<%= item.title%>
-												</td>
-												<td>
-													<%= item.ave_pice%>
-												</td>
-												<td>
-													<%= item.tel%>
-												</td>
+												<%
+												for(let name in headerData){
+													if(name=='ID')	continue
+												%>
+													<td>
+														<%= item[name]%>
+													</td>
+												<% } %>
 												<td style="width: 120px;">
-													<a href="javascript:;">编辑</a>
+													<a href="javascript:;" onclick="mod_data('<%= item.ID%>')">编辑</a>
 													<a href="/admin/house/delete?id=<%= item.ID%>" onclick="return confirm('确定删除吗？删除不可撤销')">删除</a>
 												</td>
 											</tr>
@@ -109,10 +113,12 @@
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content" style="padding:0 20px 0 20px;">
-					<div>
+					<div class="form_box">
 						<h5 style="font-size:22px;font-weight: 666;padding-bottom:10px;">新增</h5>
 					</div>
-					<form role="form" class="form-horizontal" action="?" method="post" enctype="multipart/form-data">
+					<form role="form" id="modal_form" class="form-horizontal" action="?" method="post" enctype="multipart/form-data">
+						<input type="hidden" name="seave_type" id="seave_type" value="0" />
+						<input type="hidden" name="old_id" id="old_id" value="" />
 						<div class="form-group">
 							<label for="name" class="col-sm-2 control-label">标题</label>
 							<div class="col-sm-10">
@@ -187,13 +193,13 @@
 						</div>
 						<div class="form-group">
 							<label for="inputfile" class="col-sm-3 control-label">小图（可多选）</label>
-							<div class="col-sm-10">
+							<div class="col-sm-9">
 								<input type="file" multiple name="img_paths">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="inputfile" class="col-sm-3 control-label">户型图（可多选）</label>
-							<div class="col-sm-10">
+							<div class="col-sm-9">
 								<input type="file" multiple name="property_img_paths">
 							</div>
 						</div>
@@ -243,6 +249,71 @@
 				
 				
 			}
+			//新增
+			function add_modal(){
+				$(".form_box h5").text('新增');
+				$('#seave_type').val('0');
+				$('#old_id').val('');
+				ren_modal();
+			}
+			//修改
+			function mod_data(id){
+				$(".form_box h5").text('修改');
+				$('#seave_type').val('1')
+				$('#old_id').val(id);
+				console.log(id);
+				$.ajax({
+					url:'/admin/house/get_data',
+					data:{id},
+					method:'get',
+					dataType:'json',
+					success:function(res){
+						console.log(res);
+						ren_modal(res);
+					},
+					error:function(err){
+						console.log(err)
+					}
+				})
+				
+				
+				
+			};
+			
+			function ren_modal(data){
+				if(data){
+					$('[name="title"]').val(data['title']);
+					$('[name="sub_title"]').val(data['sub_title']);
+					$('[name="position_main"]').val(data['position_main']);
+					$('[name="position_second"]').val(data['position_second']);
+					$('[name="ave_pice"]').val(data['ave_pice']);
+					$('[name="area_min"]').val(data['area_min']);
+					$('[name="area_max"]').val(data['area_max']);
+					$('[name="tel"]').val(data['tel']);
+					$('[name="building_type"]').val(data['building_type']);
+					
+					let saleTime=data['sale_time']?str_date(data['sale_time']):data['sale_time'];
+					let subMitTime=data['submit_time']?str_date(data['submit_time']):data['submit_time'];
+					$('[name="sale_time"]').val(saleTime);
+					$('[name="submit_time"]').val(subMitTime);
+				}
+				
+				$('#myModal').modal('show');
+			}
+			$('#myModal').on('hide.bs.modal', function () {
+				$("#modal_form")[0].reset();
+			})
+			
+			//时间戳=》转时间
+			function str_date(str){
+				function toDou(n){
+					return n>10?n:'0'+n;
+				}
+				
+				let nDate=new Date(str*1000);
+				return nDate.getFullYear()+'-'+toDou(nDate.getMonth() + 1)+'-'+toDou(nDate.getDate());
+			}
+			
 		</script>
 	</body>
 </html>

@@ -56,7 +56,10 @@
 }
 ------------------------------------
 LIMIT start,count
-LIKE '%'
+WHERE name LIKE '%a%' OR||AND '%b%''   -----匹配所有带a或b的字符串（"%" 符号用于在模式的前后定义通配符（默认字母））
+				'a%' OR '%d'		--匹配所有a开头 或 匹配所有d结尾的
+WHERE name NOT LIKE '%oo%'; 		--SQL 语句选取 name 不包含模式 "oo" 的所有客户：
+
 
 获取表的总数
 SELECT COUNT(*) AS C FROM house_table
