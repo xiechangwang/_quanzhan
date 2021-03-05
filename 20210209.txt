@@ -1,0 +1,130 @@
+KOA--express改进
+	1、老版本1.x
+		generator
+	2、过渡版本2.x
+		兼容1.x和3.x
+		
+--------------------
+***中间件
+	koa-static	静态资源
+	koa-route	路由(简单版){
+		//动态路由接参数,直接在后面函数里面-形参接收
+		//.get('/name/:params',async (ctx,next,params)=>{//params});
+		
+	}
+	koa-router	路由(强大版){
+		//动态路由参数,ctx.params接收
+		
+	}
+	koa-bodyparser	获取post数据{
+		//ctx.request.body
+	}
+	
+	koa-multer	下载文件{
+		const Koa = require('koa');
+		const route = require('koa-route');
+		const multer = require('koa-multer');
+		 
+		const app = new Koa();
+		const upload = multer({ dest: 'uploads/' });
+		 
+		app.use(route.post('/profile', upload.single('avatar')));
+		 
+		app.listen(3000);
+		
+	}
+	
+	koa-better-body 处理数据中间件-可以处理get、post、files{
+		const Koa = require('koa');
+		const Router = require('koa-router');
+		const body=require('koa-better-body');
+		
+		let server = new Koa()
+		server.listen(3001)
+		server.use(body({
+		    uploadDir: path.resolve(__dirname, './static/upload') //指定文件上传路径
+		    keepExtensions: 'true' //文件是否需要扩展名
+		}))
+		let router = new Router();
+		
+		router.get('/test', async ctx => {
+		   //console.log("body",ctx.request.body);//post数据
+		  //console.log('files',ctx.request.files);//文件数据
+		  console.log("fields",ctx.request.fields);//照单全收，常用
+		    ctx.body = {
+		        code: 200,
+		        data: '测试的啊',
+		        msg: ''
+		    }
+		})
+	}
+	
+	koa-convert		中间件用于兼容1.x和3.x的语法接触警告作用{
+		server.use(convert(body()));
+	}
+		
+	cookies 	koa自带{
+		
+		server.keys=['adsda4asd2as54as3d43a','4as3dsa54d56asd23as','sdf456sd1f23sdf8dsf123','asdas2d12asd315as4d6d2'];
+		
+		server.use(async (ctx,next)=>{
+			/*获取cookies
+			 获取有签名的cookie时，有签名需要加,{signed:true}
+			*/
+			console.log(ctx.cookies.get('aaaa',{signed:true}))
+			
+			/*设置cookies
+			  signed=true--需要添加keys
+			*/
+			// ctx.cookies.set('aaaa','12asdjaksl',{maxAge:24*3600*1000,signed:true});
+		})
+		
+		
+	}	
+	
+	koa-session		session中间件{
+		
+		const session = require('koa-session');
+		const Koa = require('koa');
+		const app = new Koa();
+		 
+		app.keys = ['some secret hurr'];
+		 
+		const CONFIG = {
+		  key: 'koa:sess', /**  cookie的key。 (默认是 koa:sess) */
+		  maxAge: 24*1000,   /**  session 过期时间，以毫秒ms为单位计算 。*/
+		  autoCommit: true, /** 自动提交到响应头。(默认是 true) */
+		  overwrite: true, /** 是否允许重写 。(默认是 true) */
+		  httpOnly: true, /** 是否设置HttpOnly，如果在Cookie中设置了"HttpOnly"属性，那么通过程序(JS脚本、Applet等)将无法读取到Cookie信息，这样能有效的防止XSS攻击。  (默认 true) */
+		  signed: true, /** 是否签名。(默认是 true) */
+		  rolling: true, /** 是否每次响应时刷新Session的有效期。(默认是 false) */
+		  renew: false, /** 是否在Session快过期时刷新Session的有效期。(默认是 false) */
+		};
+		 
+		app.use(session(CONFIG, app));
+		// or if you prefer all default config, just use => app.use(session(app));
+		 
+		app.use(ctx => {
+		  // ignore favicon
+		  if (ctx.path === '/favicon.ico') return;
+		 
+		  let n = ctx.session.views || 0;
+		  ctx.session.views = ++n;
+		  ctx.body = n + ' views';
+		});
+		
+		
+	}
+	
+	
+*ctx
+	ctx.req&&res	是nodejs原生自带的
+	ctx.request&&response	koa重新写入的
+-----------------------------
+			
+前端渲染
+	Angular	没落
+	react	适合大型应用
+	vue		主流
+	
+-----------------------------

@@ -178,7 +178,6 @@ router.get('/', (req, res, next) => {
 //house页面渲染
 router.get('/:table', (req, res) => {
 	const {table}=req.params;
-	console.log(table)
 	
 	if(!config[`show_in_admin_${table}`]){
 		res.sendStatus(404)
@@ -214,16 +213,11 @@ router.get('/:table', (req, res) => {
 		aFildes.push(str_key);
 		aFildesJson[str_key]=shr_name;	
 	})
-	console.log(aFildes);
-	console.log('------------------')
-	console.log(aFildesJson);
-	console.log('------------------')
 	//获取数据
-	req.db.query(`SELECT ${aFildes.join(',')} FROM ${table}_table WHERE ${like_seg} LIMIT ${start},${size}`, (err,
+	req.db.query(`SELECT ${aFildes.join(',')} FROM ${table}_table WHERE ${like_seg} ORDER BY create_time DESC LIMIT ${start},${size}`, (err,
 		res_data) => {
 		if (err) {
-			res.sendStatus(500),
-				res.end();
+			res.sendStatus(500);
 		} else {
 
 			req.db.query(`SELECT COUNT(*) AS c FROM ${table}_table WHERE ${like_seg}`, (err, data) => {
@@ -239,6 +233,7 @@ router.get('/:table', (req, res) => {
 						cur_page: page,
 						keyword: req.query['keyWord'],
 						headerData:aFildesJson,
+						table,
 					}); //向上取整ceil
 				}
 			})
@@ -248,8 +243,9 @@ router.get('/:table', (req, res) => {
 })
 
 //house-新增||修改-接口请求
-router.post('/house', (req, res) => {
+router.post('/:table', (req, res) => {
 	//data_type:0新增：1修改
+	const {table}=req.params;
 	let seave_type = req.body['seave_type'];
 	//时间
 	let sale_time = req.body['sale_time'] ? Math.floor(new Date(req.body['sale_time']).getTime() / 1000) : req.body[
@@ -282,38 +278,57 @@ router.post('/house', (req, res) => {
 		});
 	} else {
 
-
-
-		
-
 		//文件-图片
 		let aImgPath = [];
 		let aImgRealPath = [];
 		let aPropertyImgPath = [];
 		let aPropertyImgRealPath = [];
 		if (req.files.length > 0) {
-
-
-			for (let i = 0; i < req.files.length; i++) {
+			const files_obj={
+				'house':{
+					'main_img_path':{
+						path:'main_img_path',
+						real_path:'main_img_real_path',
+						type:'single'
+					},
+					'img_paths':{
+						path:'img_paths',
+						real_path:'img_real_paths',
+						type:'array'
+					},
+					'property_img_paths':{
+						path:'property_img_paths',
+						real_path:'property_img_real_paths',
+						type:'array'
+					}
+				}
+			}
+			const file_info=files_obj[table];
+			
+			//图片路径
+			const file_paths={};
+			//图片删除路径
+			const file_real_paths={};
+			
+			for(let i=0;i<req.files.length;i++){
 				//获取源文件拓展名
 				let ext = path.extname(req.files[i].originalname);
 				let newName = req.files[i].path.replace(/\\/g, '\\\\') + ext;
-				//files分类
-				if (req.files[i].fieldname == 'main_img_path') {
-					req.body['main_img_path'] = req.files[i].filename + ext;
-					req.body['main_img_real_path'] = newName;
-				} else if (req.files[i].fieldname == 'img_paths') {
-					aImgPath.push(req.files[i].filename + ext);
-					aImgRealPath.push(newName);
-				} else if (req.files[i].fieldname == 'property_img_paths') {
-					aPropertyImgPath.push(req.files[i].filename + ext);
-					aPropertyImgRealPath.push(newName);
+				
+				let name=req.files[i].fieldname;
+				if(file_info[name]){
+					if(!file_paths[name]){
+						file_paths[name]=[];
+						file_real_paths[name]=[];
+					}
+					file_paths[name].push(req.files[i].filename + ext);
+					file_real_paths[name].push(newName);
 				}
 			}
+			
 			//文件重命名
 			let i = 0
 			_next();
-
 			function _next() {
 				//获取源文件拓展名
 				let ext = path.extname(req.files[i].originalname);
@@ -333,15 +348,21 @@ router.post('/house', (req, res) => {
 				});
 			}
 
-			req.body['img_paths'] = aImgPath.join(',');
-			req.body['img_real_paths'] = aImgRealPath.join(',');
-
-			req.body['property_img_paths'] = aPropertyImgPath.join(',');
-			req.body['property_img_real_paths'] = aPropertyImgRealPath.join(',');
+			//添加到req.body身上
+			for(let name in file_paths){
+				if(file_info[name].type=='single'){
+					req.body[file_info[name].path]=file_paths[name][0];
+					req.body[file_info[name].real_path]=file_real_paths[name][0];
+				}else{
+					req.body[file_info[name].path]=file_paths[name].join(',');
+					req.body[file_info[name].real_path]=file_real_paths[name].join(',');
+				}
+			}
 		}
 
 		req.body['admin_ID'] = req.admin_id;
 		req.body['ID'] = common.uuidv4();
+		req.body['create_time']=Math.floor(new Date().getTime()/1000);
 
 		let arrField = [];
 		let arrValue = [];

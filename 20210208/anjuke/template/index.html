@@ -117,9 +117,8 @@
 						<h5 style="font-size:22px;font-weight: 666;padding-bottom:10px;">新增</h5>
 					</div>
 					<form role="form" id="modal_form" class="form-horizontal" action="?" method="post" enctype="multipart/form-data">
-						<input type="hidden" name="seave_type" id="seave_type" value="0" />
-						<input type="hidden" name="old_id" id="old_id" value="" />
-						<div class="form-group">
+						
+						<!-- <div class="form-group">
 							<label for="name" class="col-sm-2 control-label">标题</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" name="title" placeholder="请输入">
@@ -202,18 +201,13 @@
 							<div class="col-sm-9">
 								<input type="file" multiple name="property_img_paths">
 							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">关闭
-							</button>
-							<button type="submit" class="btn btn-primary">
-								提交
-							</button>
-						</div>
+						</div> -->
+						
 					</form>
 				</div>
 			</div>
 		</div>
+		<script src="/form_data.js"></script>
 		<script>
 			
 			//批量删除
@@ -254,6 +248,7 @@
 				$(".form_box h5").text('新增');
 				$('#seave_type').val('0');
 				$('#old_id').val('');
+				render_form();
 				ren_modal();
 			}
 			//修改
@@ -261,6 +256,7 @@
 				$(".form_box h5").text('修改');
 				$('#seave_type').val('1')
 				$('#old_id').val(id);
+				render_form();
 				console.log(id);
 				$.ajax({
 					url:'/admin/house/get_data',
@@ -314,6 +310,31 @@
 				return nDate.getFullYear()+'-'+toDou(nDate.getMonth() + 1)+'-'+toDou(nDate.getDate());
 			}
 			
+			function render_form(){
+				$('#modal_form').html('');
+				let formData=forms['<%= table%>'];
+				
+				let formDom='';
+				formData.forEach(item=>{
+					formDom += `<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">${item.title}</label>
+							<div class="col-sm-10">
+								<input type="${item.type}" ${item.multiple?'multiple':''} class="form-control" name="${item.name}">
+							</div>
+						</div>`;
+				});
+				$('#modal_form').append(formDom);
+				$('#modal_form').append(`<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+							</button>
+							<button type="submit" class="btn btn-primary">
+								提交
+							</button>
+						</div>`);
+				$('#modal_form').prepend(`<input type="hidden" name="seave_type" id="seave_type" value="0" />
+						<input type="hidden" name="old_id" id="old_id" value="" />`);		
+				
+			}
 		</script>
 	</body>
 </html>
