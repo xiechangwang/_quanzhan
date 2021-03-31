@@ -45,7 +45,7 @@ const body=require('koa-better-body');
 const convert=require('koa-convert')
 
 server.use(convert(body({
-	uploadDir: path.resolve(__dirname, './static/upload') //指定文件上传路径
+	uploadDir: path.resolve(__dirname, './static/upload'), //指定文件上传路径
 	keepExtensions: 'true' //文件是否需要扩展名
 })));
 

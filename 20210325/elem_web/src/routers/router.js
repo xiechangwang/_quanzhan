@@ -33,7 +33,7 @@ export default class ORouter extends Component{
         <NavBar/>
         <Switch>
             {/* 路由重定向 */}
-            <Route exact path="/" render={() => <Redirect to="/about" push />} />
+            <Route exact path="/" render={() => <Redirect to="/home" push />} />
             {
               routerModel(routersMap)
             }
