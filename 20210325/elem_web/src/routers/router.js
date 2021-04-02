@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {HashRouter as Router,Switch,Route,Redirect } from 'react-router-dom';
 import routersMap from './routerMap/index';
 
-import NavBar from '../components/navBar';
+// import NavBar from '../components/navBar';
 /** 
  *此处路由引入注意:react不支持像vue的路由懒加载 
   const xx =()=>import('xx');
@@ -30,7 +30,7 @@ export default class ORouter extends Component{
 
     return(
       <Router>
-        <NavBar/>
+        {/* <NavBar/> */}
         <Switch>
             {/* 路由重定向 */}
             <Route exact path="/" render={() => <Redirect to="/home" push />} />
