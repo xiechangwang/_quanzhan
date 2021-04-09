@@ -1,0 +1,16 @@
+ESlint
+vue单元测试
+E2E
+-------------------------------
+包含组件：
+1、编译：
+	postcss、autoprefixer	编译css
+	babel					编译es6
+	webpack					编译
+2、测试：
+	*-loader				热编译-翻译
+	eslint					代码质量
+	jest					单元测试
+	neightwatch				e2e测试
+3、其他
+	chalk					命令行高亮

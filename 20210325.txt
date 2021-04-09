@@ -1,0 +1,374 @@
+ts
+1、属性
+2、继承
+3、修饰符
+	访问控制
+		public			共有
+		protected		保护一类内部、子类
+		private			私有一类内部	
+		
+-------------------------------------
+ng-cli		
+
+1.创建项目 
+ng new <project-name> [options]
+
+2.创建控件
+ng generate <type> [options]	-》简写 ng g <type> [options]
+*<type>
+Component--组件
+Class--在给定或默认项目中创建一个新的通用类定义。
+
+******
+<指令>
+NgIf
+	<div *ngIf="false"></div>
+	
+NgSwitch
+	<div class="container" [ngSwitch]="myVar">
+	    <div *ngSwitchCase="'A'">Var is A</div>
+	    <div *ngSwitchCase="'B'">Var is B</div>
+	    <div *ngSwitchCase="'C'">Var is C</div>
+	    <div *ngSwitchDefault>Var is something else</div>
+	</div>
+	
+NgStyle
+	.设置元素的背景颜色
+	<div [style.background-color="'yellow'"]>
+	  Use fixed yellow background
+	</div> 
+	.设置元素的字体大小
+	<!-- 支持单位: px | em | %-->
+	<div>
+	   <span [ngStyle]="{color: 'red'}" [style.font-size.px]="fontSize">
+	      red text
+	   </span>
+	</div>
+
+NgClass	
+	<!-- Use component instance property -->
+	<div [ngClass]="{bordered: isBordered}">
+	   Using object literal. Border {{ isBordered ? "ON" : "OFF" }}
+	</div>
+	
+NgFor
+	<div class="ui list" *ngFor="let c of cities; let num = index"> 
+	  <div class="item">{{ num+1 }} - {{ c }}</div>
+	</div>
+	*使用 trackBy 提高列表的性能*
+	<ul>
+	      <li *ngFor="let item of collection;trackBy: trackByFn">{{item.id}}</li>
+	    </ul>
+	class App{
+		constuctor(){
+			
+		}
+		trackByFn(index,item){
+			return index;
+		}
+	}
+		
+NgNonBindable
+	*ngNonBindable 指令用于告诉 Angular 编译器，无需编译页面中某个特定的HTML代码片段。*
+	<span class="pre" ngNonBindable>
+	     ← This is what {{ content }} rendered
+	</span>
+
+******			
+<通信>	
+1、父组件 向 子组件 传递数据（绑定属性的方式）
+	
+	父组件：
+	<!-- parentComponent -->
+	<app-child [name]="'childName'"></app-child>
+	
+	子组件：
+	// 子组件需要在ts里面使用@Input接收
+	.html
+	<span>{{name}}</span>
+	
+	.ts
+	@Input() public name:string = '';
+	
+	
+2、子组件 向 父组件 传递数据（【Output EventEmitter】）
+	子组件：
+	.ts
+	@Output()
+	public readonly childEmit: EventEmitter<T> = new EventEmitter<T>();
+	
+	this.childEmit.emit(data);
+
+	父组件：
+	.html
+	<app-child (childEmit)="getData($event)"></app-child>
+	.ts
+	public getData(data:T): void {  }
+
+3、ViewChild 方法
+
+
+
+<事件>
+	(事件)="eventName()"
+	
+	
+<管道（pipe）>
+	管道操作符 (|)
+	
+	Angular 的常用内置管道函数：
+	DatePipe，UpperCasePipe，LowerCasePipe，CurrencyPipi，PercentPipe，JsonPipe等。
+
+
+
+---------------
+forever-node服务监听
+
+npm install forever -g
+
+forever start xx.js
+
+forever stop xx.js
+
+
+
+
+------------------饿了吗项目-------------
+1、数据库
+	店铺
+	菜单
+	购物车
+2、数据抓取问题
+	店铺
+	详情	
+
+*接口--/api/
+1、收集数据	/collect
+	 类型
+	 数据
+
+2、饭店数据	/restaurang/:page/:size/
+
+3、菜单数据	/meun/:restaurang_id
+
+4、购物城	/cart
+		添加	POST/cart
+		删除	DELECT/cart/:id/
+		结算	
+
+
+
+校验
+1、爬虫-chawer.js				校验--业务逻辑
+2、数据库-database.js		校验--安全性		
+
+
+
+---------------React----------------------
+*react-router-dom
+ 	1、第一个BrowserRouter就是总的路由管理了，他是说明，内部的路由的跳转，都是基于浏览器的history模式进行跳转的，是路由的最外层
+
+	2、Route，这个就是实际的单个路由了，指明了路由的path，路由对于的组件，以及匹配模式等，
+
+	3、Switch，这个就是开关的意思，也就是说，由上到下匹配，当匹配成功一个后就会停止当前匹配，防止出现一次匹配多个路由
+
+	4、Redirect，这个字面意思就是重定向，也就是说这个是我们所用的路由重定向的功能，当该Redirect以上的Route没有匹配成功时，就会执行这行代码，以决定是否进行重定向
+
+
+*JS跳转路由
+	import {withRouter} from 'react-router-dom';
+	withRouter(xxx);
+	需要用withRouter包裹js跳转的组件
+	
+	this.props.history.push({pathname:'xxx',传递参数});
+
+*路由传参
+1、动态路由传参
+	/xx/xx/:id
+	
+	接收页:this.props.match.params.id
+
+	缺点：只能传递字符串
+
+
+2、query、params、state传递参数
+		to={{pathname:'xx',query:{xx:'aa'}}}
+
+		接收页 this.props.location.query||state.xx;
+
+		缺点 页面刷新后参数就会丢失
+
+
+*redux+react-redux+redux-thunk
+
+src{	//目录下创建最大的
+
+--1--store{	//store里面创建index和reducers(这个reducers是融合后面每个组件中的store-reducer);
+	 
+	 	--2(A)--indexjs{	//index里面引入redux+redux-thunk
+	 			
+					import {createStore,compose,applyMiddleware} from 'redux;	//需要两个必要组件，compose为多个中间件必要、如果只有一个中间件可以不要
+					import thunk from 'redux-thunk';
+
+					//引各最大的reducers
+					import reducers from './reducers';
+
+					//创建store
+					const store=createStore(
+						reducers,
+						//插入中间件
+						compose(applyMiddleware(thunk))	
+
+					);
+
+					//导出store
+					export default store;
+	 }
+	 --2(B)--reducers{	//这里合并所有小的store-reducer；引入redux中combineReducers方法
+
+						import {combineReducers} from 'redux';
+
+						//各个中间中的store
+						//例：home组件的暴露出的是一个对象，需要花括号引起来--as可以重新取名
+						import {redcer as homeReducer} from './home/store'
+
+						//创建合并的reducers
+						const routers=combineReducers({
+							home:homeReducer,
+						});
+
+						//导出reducers
+						export default reducers;
+	 }
+
+
+
+	 --3--Home组件中创建store{//store中创建index、reducer、type、action	
+					--A--:home》store》type.js{
+
+							//创建各种type类型
+							//建议大写
+							export const HOME_TYPE="HOME_TYPE";
+
+						}
+					--B--:home》store》action.js{
+							//引入类型
+							import * as type from './type';
+
+							export const setHomeType=(msg)=>{
+								return async (dispatch,getState)=>{
+									dispatch({
+											//type为必选。后面为要修改的参数
+											type:type.HOME_TYPE,
+											msg:msg,  
+										})
+								}	
+							}
+					}	
+
+					--C--:home》store》reducer.js{
+							//引入类型
+							import * as type from './type';
+
+							//创建默认仓库、初始化值：defaultState
+							const defaultState={
+									msg:"",
+							}
+
+							//创建reducer方法；接收两个参数state、action
+							const reducer=(state=defaultState,action)=>{
+								//用switch判断
+								switch(action.type){
+									case type.HOME_TYPE:
+										//此处才是真正的给变msg值
+										//需要先state拓展后再将改变值放入对象
+										return {...state,msg:action.msg};
+									default:
+										return state;	
+								}
+							}
+							export default reducer;
+
+					}	
+					--D--:home》store》index.js{
+							//引入type、action、reducer
+							import * as type from './type';
+							import * as action from './action';
+							import reducer from './reducer';
+
+							//导出
+							export {reducer,type,reducer};
+					}
+			}
+			--4--:APP.js组件{	//引入Provider组件和根store
+					import {Provider} from 'react-redux';
+					import store from './store';
+
+					class APP extends Recat.Component{
+							render(){
+								return(
+										//Provider导入全局store、里面子组件可以共享store个属性、方法
+										<Provider store={store}>
+											<App/>
+										</Provider>
+								)
+
+							}
+
+					}
+
+			}
+
+
+		--5--:home子组件获取、修改store{	
+					//connect方法接收参数mapStateProps、mapDispatchProps
+					import {connect} from 'react-redux';					
+					
+					//引入store中action所有方法
+					import {action} from './store';
+
+					class Home extends React.Component{
+						render(){
+							const {...拓展store里面获取到的属性值和方法
+								//属性
+								msg,
+								//方法
+								handleClick
+							}=this.props;
+							return(
+								//这里绑定方法需要使用箭头函数
+								<div onClick={()=>handleClick()}></div>
+
+							);
+						}
+					}
+
+					//接收state并且把state挂在到props身上
+					const mapStateProps=(state)=>{
+						return{
+							//这里的home层是：第二步合并reducer时创建的，为了更好的管理
+							msg:state.home.msg
+						}
+					}
+
+					//dispatch、调用action.js身上的方法
+					const mapDispatchProps= (dispatch)=>{
+						return{
+							handleClick(){
+								//调用action.js里面对应的方法
+								dispatch(action.setHomeType);
+							}
+						}
+					}	
+
+					export default connect(mapStateProps,mapDispatchProps)(Home);
+
+
+		}
+				
+
+
+}	
+
+
+}
