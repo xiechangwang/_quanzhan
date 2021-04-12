@@ -4,7 +4,7 @@ const webpackDevServer = require('webpack-dev-server');
 
 module.exports={
   //单入口、单出口
-  entry:'./src/1',
+  entry:'./src/1.js',
   output:{
     path:path.resolve(__dirname,'dest'),
     filename:'build.js'
@@ -28,5 +28,24 @@ module.exports={
     hot:true,               //开启热更新
     // open:true,           //打开浏览器
     inline: true,          //应用程序将启用 inline模式。这意味着将在整个页面重新加载;=false实现更改热更新
-  }
+  },
+  module:{
+    rules:[
+      // bable
+      {
+        test:/\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+     }
+    ]
+  },
+  // resolve:{
+  //   //尝试按顺序解析这些后缀名
+  //   extensions:[]
+  // }
 }
