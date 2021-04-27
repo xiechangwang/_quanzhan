@@ -11,11 +11,71 @@
  Target Server Version : 50553
  File Encoding         : 65001
 
- Date: 02/04/2021 11:20:52
+ Date: 27/04/2021 09:51:51
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for beauty
+-- ----------------------------
+DROP TABLE IF EXISTS `beauty`;
+CREATE TABLE `beauty`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `beauty_id` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of beauty
+-- ----------------------------
+INSERT INTO `beauty` VALUES (1, '王a', 2);
+INSERT INTO `beauty` VALUES (2, '王c', 4);
+INSERT INTO `beauty` VALUES (4, '张a', 1);
+INSERT INTO `beauty` VALUES (5, '张b', 8);
+INSERT INTO `beauty` VALUES (6, '李d', 10);
+
+-- ----------------------------
+-- Table structure for bodys
+-- ----------------------------
+DROP TABLE IF EXISTS `bodys`;
+CREATE TABLE `bodys`  (
+  `id` int(11) NOT NULL,
+  `bodyName` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `userCp` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of bodys
+-- ----------------------------
+INSERT INTO `bodys` VALUES (2, '张三', 100);
+INSERT INTO `bodys` VALUES (4, '李四', 500);
+INSERT INTO `bodys` VALUES (8, '王五', 300);
+INSERT INTO `bodys` VALUES (10, '赵liu', 400);
+INSERT INTO `bodys` VALUES (15, '马超', 600);
+
+-- ----------------------------
+-- Table structure for emp
+-- ----------------------------
+DROP TABLE IF EXISTS `emp`;
+CREATE TABLE `emp`  (
+  `id` int(11) NOT NULL,
+  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `ld_id` int(11) NULL DEFAULT NULL,
+  `ld_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of emp
+-- ----------------------------
+INSERT INTO `emp` VALUES (1, '张三', 10, '张三领导');
+INSERT INTO `emp` VALUES (2, '李四', 12, '李四领导');
+INSERT INTO `emp` VALUES (3, '王五', 15, '王五领导');
+INSERT INTO `emp` VALUES (0, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for meun_table
@@ -266,5 +326,31 @@ INSERT INTO `restaurant_table` VALUES (169, 'E13889818869888213043', '汤先生�
 INSERT INTO `restaurant_table` VALUES (170, 'E13676330435478308907', '有一家烤肉丼饭(五角场店)', '', 2975, 0, 'D22658DC583D4EE3939E28135AE6453Cpng', 31.2947, 121.513, '9:30/22:05', '', 4.8, 2066, 2152);
 INSERT INTO `restaurant_table` VALUES (171, 'E6985009759418338442', '阿吉特', '', 2741, 4, '2e661707bc05397f9f0d0c69271c403cjpeg', 31.3013, 121.492, '10:25/21:30', '', 4.9, 5661, 1598);
 INSERT INTO `restaurant_table` VALUES (172, 'E1468688696611511050', 'Lady M(上海合生汇国际广场店)', '', 2700, 1, '433094a98ecc8d282bd549a1f6a5e98apng', 31.2995, 121.517, '10:00/21:00', '', 4.9, 1138, 1442);
+
+-- ----------------------------
+-- Table structure for user_table
+-- ----------------------------
+DROP TABLE IF EXISTS `user_table`;
+CREATE TABLE `user_table`  (
+  `ID` int(6) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE,
+  UNIQUE INDEX `ID NOT UNIQUE`(`ID`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user_table
+-- ----------------------------
+INSERT INTO `user_table` VALUES (2, 'dasdas', 'sadasd');
+INSERT INTO `user_table` VALUES (3, 'AAA', '439EF9D85B8A6D437CB960CE2022E86A');
+INSERT INTO `user_table` VALUES (4, 'zhangsan', 'E10ADC3949BA59ABBE56E057F20F883E');
+INSERT INTO `user_table` VALUES (5, 'zhangsan', 'A3590023DF66AC92AE35E3316026D17D');
+INSERT INTO `user_table` VALUES (6, 'AAA', 'SSSSSSSSDDDD');
+INSERT INTO `user_table` VALUES (7, 'BBBBB', 'DDDDDD');
+INSERT INTO `user_table` VALUES (8, 'CCCCC', 'FFFFFFF');
+INSERT INTO `user_table` VALUES (9, 'CCCCC', 'CCCSSS');
+INSERT INTO `user_table` VALUES (10, 'AAA', 'AAAA');
+INSERT INTO `user_table` VALUES (11, '张三', '12313131');
 
 SET FOREIGN_KEY_CHECKS = 1;
